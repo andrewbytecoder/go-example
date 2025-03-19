@@ -2,14 +2,14 @@
 
 <img align="right" width="159px" src="https://raw.githubusercontent.com/gin-gonic/logo/master/color.png">
 
-[![Build Status](https://github.com/gin-gonic/gin/workflows/Run%20Tests/badge.svg?branch=master)](https://github.com/gin-gonic/gin/actions?query=branch%3Amaster)
+[![Build Status](https://github.com/zzu-andrew/go-example/gin/workflows/Run%20Tests/badge.svg?branch=master)](https://github.com/zzu-andrew/go-example/gin/actions?query=branch%3Amaster)
 [![codecov](https://codecov.io/gh/gin-gonic/gin/branch/master/graph/badge.svg)](https://codecov.io/gh/gin-gonic/gin)
-[![Go Report Card](https://goreportcard.com/badge/github.com/gin-gonic/gin)](https://goreportcard.com/report/github.com/gin-gonic/gin)
-[![Go Reference](https://pkg.go.dev/badge/github.com/gin-gonic/gin?status.svg)](https://pkg.go.dev/github.com/gin-gonic/gin?tab=doc)
-[![Sourcegraph](https://sourcegraph.com/github.com/gin-gonic/gin/-/badge.svg)](https://sourcegraph.com/github.com/gin-gonic/gin?badge)
+[![Go Report Card](https://goreportcard.com/badge/github.com/zzu-andrew/go-example/gin)](https://goreportcard.com/report/github.com/zzu-andrew/go-example/gin)
+[![Go Reference](https://pkg.go.dev/badge/github.com/zzu-andrew/go-example/gin?status.svg)](https://pkg.go.dev/github.com/zzu-andrew/go-example/gin?tab=doc)
+[![Sourcegraph](https://sourcegraph.com/github.com/zzu-andrew/go-example/gin/-/badge.svg)](https://sourcegraph.com/github.com/zzu-andrew/go-example/gin?badge)
 [![Open Source Helpers](https://www.codetriage.com/gin-gonic/gin/badges/users.svg)](https://www.codetriage.com/gin-gonic/gin)
-[![Release](https://img.shields.io/github/release/gin-gonic/gin.svg?style=flat-square)](https://github.com/gin-gonic/gin/releases)
-[![TODOs](https://badgen.net/https/api.tickgit.com/badgen/github.com/gin-gonic/gin)](https://www.tickgit.com/browse?repo=github.com/gin-gonic/gin)
+[![Release](https://img.shields.io/github/release/gin-gonic/gin.svg?style=flat-square)](https://github.com/zzu-andrew/go-example/gin/releases)
+[![TODOs](https://badgen.net/https/api.tickgit.com/badgen/github.com/zzu-andrew/go-example/gin)](https://www.tickgit.com/browse?repo=github.com/zzu-andrew/go-example/gin)
 
 Gin is a web framework written in [Go](https://go.dev/). It features a martini-like API with performance that is up to 40 times faster thanks to [httprouter](https://github.com/julienschmidt/httprouter).
 If you need performance and good productivity, you will love Gin.
@@ -37,13 +37,13 @@ Gin requires [Go](https://go.dev/) version [1.22](https://go.dev/doc/devel/relea
 With [Go's module support](https://go.dev/wiki/Modules#how-to-use-modules), `go [build|run|test]` automatically fetches the necessary dependencies when you add the import in your code:
 
 ```sh
-import "github.com/gin-gonic/gin"
+import "github.com/zzu-andrew/go-example/gin"
 ```
 
 Alternatively, use `go get`:
 
 ```sh
-go get -u github.com/gin-gonic/gin
+go get -u github.com/zzu-andrew/go-example/gin
 ```
 
 ### Running Gin
@@ -56,7 +56,7 @@ package main
 import (
   "net/http"
 
-  "github.com/gin-gonic/gin"
+  "github.com/zzu-andrew/go-example/gin"
 )
 
 func main() {
@@ -86,11 +86,11 @@ Learn and practice with the [Gin Quick Start](docs/doc.md), which includes API e
 
 #### Examples
 
-A number of ready-to-run examples demonstrating various use cases of Gin are available in the [Gin examples](https://github.com/gin-gonic/examples) repository.
+A number of ready-to-run examples demonstrating various use cases of Gin are available in the [Gin examples](https://github.com/zzu-andrew/go-example/examples) repository.
 
 ## Documentation
 
-See the [API documentation on go.dev](https://pkg.go.dev/github.com/gin-gonic/gin).
+See the [API documentation on go.dev](https://pkg.go.dev/github.com/zzu-andrew/go-example/gin).
 
 The documentation is also available on [gin-gonic.com](https://gin-gonic.com) in several languages:
 
@@ -156,7 +156,7 @@ You can find many useful Gin middlewares at [gin-contrib](https://github.com/gin
 
 ## Uses
 
-Here are some awesome projects that are using the [Gin](https://github.com/gin-gonic/gin) web framework.
+Here are some awesome projects that are using the [Gin](https://github.com/zzu-andrew/go-example/gin) web framework.
 
 - [gorush](https://github.com/appleboy/gorush): A push notification server.
 - [fnproject](https://github.com/fnproject/fn): A container native, cloud agnostic serverless platform.

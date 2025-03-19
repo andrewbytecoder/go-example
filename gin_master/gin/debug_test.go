@@ -64,7 +64,7 @@ func TestDebugPrintRoutes(t *testing.T) {
 		debugPrintRoute(http.MethodGet, "/path/to/route/:param", HandlersChain{func(c *Context) {}, handlerNameTest})
 		SetMode(TestMode)
 	})
-	assert.Regexp(t, `^\[GIN-debug\] GET    /path/to/route/:param     --> (.*/vendor/)?github.com/gin-gonic/gin.handlerNameTest \(2 handlers\)\n$`, re)
+	assert.Regexp(t, `^\[GIN-debug\] GET    /path/to/route/:param     --> (.*/vendor/)?github.com/zzu-andrew/go-example/gin.handlerNameTest \(2 handlers\)\n$`, re)
 }
 
 func TestDebugPrintRouteFunc(t *testing.T) {
@@ -76,7 +76,7 @@ func TestDebugPrintRouteFunc(t *testing.T) {
 		debugPrintRoute(http.MethodGet, "/path/to/route/:param1/:param2", HandlersChain{func(c *Context) {}, handlerNameTest})
 		SetMode(TestMode)
 	})
-	assert.Regexp(t, `^\[GIN-debug\] GET    /path/to/route/:param1/:param2           --> (.*/vendor/)?github.com/gin-gonic/gin.handlerNameTest \(2 handlers\)\n$`, re)
+	assert.Regexp(t, `^\[GIN-debug\] GET    /path/to/route/:param1/:param2           --> (.*/vendor/)?github.com/zzu-andrew/go-example/gin.handlerNameTest \(2 handlers\)\n$`, re)
 }
 
 func TestDebugPrintLoadTemplate(t *testing.T) {

@@ -15,10 +15,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gin-gonic/gin/internal/json"
-	testdata "github.com/gin-gonic/gin/testdata/protoexample"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/zzu-andrew/go-example/gin/internal/json"
+	testdata "github.com/zzu-andrew/go-example/gin/testdata/protoexample"
 	"google.golang.org/protobuf/proto"
 )
 
