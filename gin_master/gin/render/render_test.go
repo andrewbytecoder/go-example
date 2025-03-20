@@ -17,8 +17,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/zzu-andrew/go-example/gin/internal/json"
-	testdata "github.com/zzu-andrew/go-example/gin/testdata/protoexample"
+	"go-example/gin/internal/json"
+	testdata "go-example/gin/testdata/protoexample"
 	"google.golang.org/protobuf/proto"
 )
 

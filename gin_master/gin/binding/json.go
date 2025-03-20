@@ -10,7 +10,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/zzu-andrew/go-example/gin_master/gin/internal/json"
+	"go-example/gin_master/gin/internal/json"
 )
 
 // EnableDecoderUseNumber is used to call the UseNumber method on the JSON

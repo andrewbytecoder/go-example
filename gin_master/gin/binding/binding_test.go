@@ -20,7 +20,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/zzu-andrew/go-example/gin_master/gin/testdata/protoexample"
+	"go-example/gin_master/gin/testdata/protoexample"
 	"google.golang.org/protobuf/proto"
 )
 

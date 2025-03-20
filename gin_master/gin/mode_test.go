@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/zzu-andrew/go-example/gin/binding"
+	"go-example/gin/binding"
 )
 
 func init() {

@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/zzu-andrew/go-example/gin/internal/bytesconv"
+	"go-example/gin_master/gin/internal/bytesconv"
 )
 
 // String contains the given interface object slice and its format.

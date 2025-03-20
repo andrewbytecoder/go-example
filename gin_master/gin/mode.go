@@ -6,11 +6,10 @@ package gin
 
 import (
 	"flag"
+	"go-example/gin_master/gin/binding"
 	"io"
 	"os"
 	"sync/atomic"
-
-	"github.com/zzu-andrew/go-example/gin/binding"
 )
 
 // EnvGinMode indicates environment name for gin mode.

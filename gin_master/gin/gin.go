@@ -15,8 +15,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/zzu-andrew/go-example/gin_master/gin/internal/bytesconv"
-	"github.com/zzu-andrew/go-example/gin_master/gin/render"
+	"go-example/gin_master/gin/internal/bytesconv"
+	"go-example/gin_master/gin/render"
 
 	"github.com/quic-go/quic-go/http3"
 	"golang.org/x/net/http2"
@@ -519,7 +519,7 @@ func (engine *Engine) Run(addr ...string) (err error) {
 
 	if engine.isUnsafeTrustedProxies() {
 		debugPrint("[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n" +
-			"Please check https://github.com/zzu-andrew/go-example/gin/blob/master/docs/doc.md#dont-trust-all-proxies for details.")
+			"Please check https://go-example/gin/blob/master/docs/doc.md#dont-trust-all-proxies for details.")
 	}
 	engine.updateRouteTrees()
 	address := resolveAddress(addr)
