@@ -13,6 +13,7 @@ type IRouter struct {
 	ReserveApi
 	JsonApi
 	UrlApi
+	RedirectApi
 }
 
 func Router() *gin.Engine {
@@ -67,6 +68,14 @@ func Router() *gin.Engine {
 		urlApi.POST("/url", apiRouter.PostUrl)
 		urlApi.DELETE("/url", apiRouter.DeleteUrl)
 		urlApi.PUT("/url", apiRouter.PutUrl)
+	}
+
+	redirectApi := router.Group("/redirect")
+	{
+		redirectApi.GET("/get", apiRouter.GetRedirect)
+		redirectApi.POST("/post", apiRouter.PostRedirect)
+		redirectApi.DELETE("/delete", apiRouter.DeleteRedirect)
+		redirectApi.PUT("/put", apiRouter.PutRedirect)
 	}
 
 	router.Run(":8080")
