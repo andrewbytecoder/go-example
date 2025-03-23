@@ -11,7 +11,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"go-example/gin_master/gin/internal/bytesconv"
+	"github.com/zzu-andrew/go-example/gin_master/gin/internal/bytesconv"
 )
 
 var (

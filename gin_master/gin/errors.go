@@ -9,7 +9,7 @@ import (
 	"reflect"
 	"strings"
 
-	"go-example/gin_master/gin/internal/json"
+	"github.com/zzu-andrew/go-example/gin_master/gin/internal/json"
 )
 
 // ErrorType is an unsigned 64-bit error code as defined in the gin spec.

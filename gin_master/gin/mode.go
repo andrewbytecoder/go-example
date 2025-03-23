@@ -6,7 +6,7 @@ package gin
 
 import (
 	"flag"
-	"go-example/gin_master/gin/binding"
+	"github.com/zzu-andrew/go-example/gin_master/gin/binding"
 	"io"
 	"os"
 	"sync/atomic"

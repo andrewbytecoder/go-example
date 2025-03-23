@@ -21,8 +21,8 @@ import (
 	"time"
 
 	"github.com/gin-contrib/sse"
-	"go-example/gin_master/gin/binding"
-	"go-example/gin_master/gin/render"
+	"github.com/zzu-andrew/go-example/gin_master/gin/binding"
+	"github.com/zzu-andrew/go-example/gin_master/gin/render"
 )
 
 // Content-Type MIME of the most common data formats.

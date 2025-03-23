@@ -15,8 +15,8 @@ import (
 	"strings"
 	"sync"
 
-	"go-example/gin_master/gin/internal/bytesconv"
-	"go-example/gin_master/gin/render"
+	"github.com/zzu-andrew/go-example/gin_master/gin/internal/bytesconv"
+	"github.com/zzu-andrew/go-example/gin_master/gin/render"
 
 	"github.com/quic-go/quic-go/http3"
 	"golang.org/x/net/http2"

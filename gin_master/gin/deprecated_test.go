@@ -11,7 +11,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"go-example/gin_master/gin/binding"
+	"github.com/zzu-andrew/go-example/gin_master/gin/binding"
 )
 
 func TestBindWith(t *testing.T) {

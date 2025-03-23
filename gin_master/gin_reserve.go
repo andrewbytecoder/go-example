@@ -22,7 +22,7 @@ func main() {
 	}
 
 	// 处理所有HTTP方法的/json路径请求
-	router.Any("/json", func(c *gin.Context) {
+	router.Any("/proxy", func(c *gin.Context) {
 		proxy.ServeHTTP(c.Writer, c.Request)
 	})
 

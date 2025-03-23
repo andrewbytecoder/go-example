@@ -1,6 +1,6 @@
 package main
 
-import "go-example/gin_master/gin"
+import "github.com/zzu-andrew/github.com/zzu-andrew/go-example/gin_master/gin"
 
 //go:generate swag init --parseDependency --parseDepth=6 --instanceName admin -o ./doc/admin
 func main() {
