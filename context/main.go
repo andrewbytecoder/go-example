@@ -43,6 +43,24 @@ func main() {
 		wg.Done()
 	}()
 
+	// 示例：启动多个业务协程
+	for i := 0; i < 3; i++ {
+		wg.Add(1)
+		go func(id int) {
+			defer wg.Done()
+			for {
+				select {
+				case <-ctx.Done():
+					log.Printf("Worker %d exiting gracefully...", id)
+					return
+				default:
+					log.Printf("Worker %d is working...", id)
+					// 模拟工作
+					// time.Sleep(time.Second)
+				}
+			}
+		}(i)
+	}
 	// wait for all goroutines to return
 	wg.Wait()
 
