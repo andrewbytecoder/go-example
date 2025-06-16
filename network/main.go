@@ -1,4 +1,5 @@
-package network
+package main
 
 func main() {
+
 }

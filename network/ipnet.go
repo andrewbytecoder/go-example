@@ -1,4 +1,4 @@
-package network // Copyright 2015 flannel authors
+package main // Copyright 2015 flannel authors
 
 import (
 	"bytes"

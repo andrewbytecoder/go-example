@@ -1,0 +1,477 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample server.",
+        "title": "Swagger Example API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api",
+    "paths": {
+        "/data": {
+            "get": {
+                "description": "Get data from the server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "data"
+                ],
+                "summary": "Get Data",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update data on the server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "data"
+                ],
+                "summary": "Put Data",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Post data to the server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "data"
+                ],
+                "summary": "Post Data",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete data from the server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "data"
+                ],
+                "summary": "Delete Data",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/form": {
+            "get": {
+                "description": "Get form data from the server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "form"
+                ],
+                "summary": "Get Form",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update form data on the server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "form"
+                ],
+                "summary": "Put Form",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Post form data to the server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "form"
+                ],
+                "summary": "Post Form",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete form data from the server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "form"
+                ],
+                "summary": "Delete Form",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/query": {
+            "get": {
+                "description": "Get query parameters from the server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "query"
+                ],
+                "summary": "Get Query",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Name of the user",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "1234",
+                        "description": "ID of the user",
+                        "name": "id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update query data on the server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "query"
+                ],
+                "summary": "Put Query",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Name of the user",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete query data from the server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "query"
+                ],
+                "summary": "Delete Query",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Name of the user",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H"
+                        }
+                    }
+                }
+            }
+        },
+        "/redirect": {
+            "get": {
+                "description": "Redirect to Baidu using GET method",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "redirect"
+                ],
+                "summary": "Get Redirect",
+                "responses": {
+                    "301": {
+                        "description": "Redirect to https://www.baidu.com",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Redirect to Baidu using PUT method",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "redirect"
+                ],
+                "summary": "Put Redirect",
+                "responses": {
+                    "301": {
+                        "description": "Redirect to https://www.baidu.com",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Redirect to Baidu using POST method",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "redirect"
+                ],
+                "summary": "Post Redirect",
+                "responses": {
+                    "301": {
+                        "description": "Redirect to https://www.baidu.com",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Redirect to Baidu using DELETE method",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "redirect"
+                ],
+                "summary": "Delete Redirect",
+                "responses": {
+                    "301": {
+                        "description": "Redirect to https://www.baidu.com",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/reserve": {
+            "get": {
+                "description": "Get reserve data from the server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reserve"
+                ],
+                "summary": "Get Reserve",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update reserve data on the server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reserve"
+                ],
+                "summary": "Put Reserve",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Post reserve data to the server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reserve"
+                ],
+                "summary": "Post Reserve",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete reserve data from the server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reserve"
+                ],
+                "summary": "Delete Reserve",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "github_com_zzu-andrew_go-example_gin_master_gin.H": {
+            "type": "object",
+            "additionalProperties": {}
+        }
+    }
+}

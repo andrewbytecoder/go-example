@@ -1,8 +1,8 @@
-package network
+package main
 
 import (
-	"internal/bytealg"
-	"internal/itoa"
+	//"internal/bytealg"
+	//"internal/itoa"
 	//"internal/stringslite"
 	"net/netip"
 )
@@ -104,20 +104,6 @@ var (
 	IPv6linklocalallrouters    = IP{0xff, 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x02}
 )
 
-// IsUnspecified reports whether ip is an unspecified address, either
-// the IPv4 address "0.0.0.0" or the IPv6 address "::".
-func (ip IP) IsUnspecified() bool {
-	return ip.Equal(IPv4zero) || ip.Equal(IPv6unspecified)
-}
-
-// IsLoopback reports whether ip is a loopback address.
-func (ip IP) IsLoopback() bool {
-	if ip4 := ip.To4(); ip4 != nil {
-		return ip4[0] == 127
-	}
-	return ip.Equal(IPv6loopback)
-}
-
 // IsPrivate reports whether ip is a private address, according to
 // RFC 1918 (IPv4 addresses) and RFC 4193 (IPv6 addresses).
 func (ip IP) IsPrivate() bool {
@@ -167,23 +153,6 @@ func (ip IP) IsLinkLocalUnicast() bool {
 		return ip4[0] == 169 && ip4[1] == 254
 	}
 	return len(ip) == IPv6len && ip[0] == 0xfe && ip[1]&0xc0 == 0x80
-}
-
-// IsGlobalUnicast reports whether ip is a global unicast
-// address.
-//
-// The identification of global unicast addresses uses address type
-// identification as defined in RFC 1122, RFC 4632 and RFC 4291 with
-// the exception of IPv4 directed broadcast addresses.
-// It returns true even if ip is in IPv4 private address space or
-// local IPv6 unicast address space.
-func (ip IP) IsGlobalUnicast() bool {
-	return (len(ip) == IPv4len || len(ip) == IPv6len) &&
-		!ip.Equal(IPv4bcast) &&
-		!ip.IsUnspecified() &&
-		!ip.IsLoopback() &&
-		!ip.IsMulticast() &&
-		!ip.IsLinkLocalUnicast()
 }
 
 // Is p all zeros?
@@ -254,25 +223,6 @@ func allFF(b []byte) bool {
 		}
 	}
 	return true
-}
-
-// Mask returns the result of masking the IP address ip with mask.
-func (ip IP) Mask(mask IPMask) IP {
-	if len(mask) == IPv6len && len(ip) == IPv4len && allFF(mask[:12]) {
-		mask = mask[12:]
-	}
-	if len(mask) == IPv4len && len(ip) == IPv6len && bytealg.Equal(ip[:12], v4InV6Prefix) {
-		ip = ip[12:]
-	}
-	n := len(ip)
-	if n != len(mask) {
-		return nil
-	}
-	out := make(IP, n)
-	for i := 0; i < n; i++ {
-		out[i] = ip[i] & mask[i]
-	}
-	return out
 }
 
 // String returns the string form of the IP address ip.
@@ -373,22 +323,6 @@ func (ip *IP) UnmarshalText(text []byte) error {
 	return nil
 }
 
-// Equal reports whether ip and x are the same IP address.
-// An IPv4 address and that same address in IPv6 form are
-// considered to be equal.
-func (ip IP) Equal(x IP) bool {
-	if len(ip) == len(x) {
-		return bytealg.Equal(ip, x)
-	}
-	if len(ip) == IPv4len && len(x) == IPv6len {
-		return bytealg.Equal(x[0:12], v4InV6Prefix) && bytealg.Equal(ip, x[12:])
-	}
-	if len(ip) == IPv6len && len(x) == IPv4len {
-		return bytealg.Equal(ip[0:12], v4InV6Prefix) && bytealg.Equal(ip[12:], x)
-	}
-	return false
-}
-
 func (ip IP) matchAddrFamily(x IP) bool {
 	return ip.To4() != nil && x.To4() != nil || ip.To16() != nil && ip.To4() == nil && x.To16() != nil && x.To4() == nil
 }
@@ -484,27 +418,6 @@ func (n *IPNet) Contains(ip IP) bool {
 
 // Network returns the address's network name, "ip+net".
 func (n *IPNet) Network() string { return "ip+net" }
-
-// String returns the CIDR notation of n like "192.0.2.0/24"
-// or "2001:db8::/48" as defined in RFC 4632 and RFC 4291.
-// If the mask is not in the canonical form, it returns the
-// string which consists of an IP address, followed by a slash
-// character and a mask expressed as hexadecimal form with no
-// punctuation like "198.51.100.0/c000ff00".
-func (n *IPNet) String() string {
-	if n == nil {
-		return "<nil>"
-	}
-	nn, m := networkNumberAndMask(n)
-	if nn == nil || m == nil {
-		return "<nil>"
-	}
-	l := simpleMaskLength(m)
-	if l == -1 {
-		return nn.String() + "/" + m.String()
-	}
-	return nn.String() + "/" + itoa.Uitoa(uint(l))
-}
 
 // ParseIP parses s as an IP address, returning the result.
 // The string s can be in IPv4 dotted decimal ("192.0.2.1"), IPv6

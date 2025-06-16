@@ -1,0 +1,318 @@
+basePath: /api
+definitions:
+  github_com_zzu-andrew_go-example_gin_master_gin.H:
+    additionalProperties: {}
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /data:
+    delete:
+      consumes:
+      - application/json
+      description: Delete data from the server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H'
+      summary: Delete Data
+      tags:
+      - data
+    get:
+      consumes:
+      - application/json
+      description: Get data from the server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H'
+      summary: Get Data
+      tags:
+      - data
+    post:
+      consumes:
+      - application/json
+      description: Post data to the server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H'
+      summary: Post Data
+      tags:
+      - data
+    put:
+      consumes:
+      - application/json
+      description: Update data on the server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H'
+      summary: Put Data
+      tags:
+      - data
+  /form:
+    delete:
+      consumes:
+      - application/json
+      description: Delete form data from the server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H'
+      summary: Delete Form
+      tags:
+      - form
+    get:
+      consumes:
+      - application/json
+      description: Get form data from the server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H'
+      summary: Get Form
+      tags:
+      - form
+    post:
+      consumes:
+      - application/json
+      description: Post form data to the server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H'
+      summary: Post Form
+      tags:
+      - form
+    put:
+      consumes:
+      - application/json
+      description: Update form data on the server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H'
+      summary: Put Form
+      tags:
+      - form
+  /query:
+    delete:
+      consumes:
+      - application/json
+      description: Delete query data from the server
+      parameters:
+      - description: Name of the user
+        in: formData
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H'
+      summary: Delete Query
+      tags:
+      - query
+    get:
+      consumes:
+      - application/json
+      description: Get query parameters from the server
+      parameters:
+      - description: Name of the user
+        in: query
+        name: name
+        required: true
+        type: string
+      - default: "1234"
+        description: ID of the user
+        in: query
+        name: id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H'
+      summary: Get Query
+      tags:
+      - query
+    put:
+      consumes:
+      - application/json
+      description: Update query data on the server
+      parameters:
+      - description: Name of the user
+        in: formData
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H'
+      summary: Put Query
+      tags:
+      - query
+  /redirect:
+    delete:
+      consumes:
+      - application/json
+      description: Redirect to Baidu using DELETE method
+      produces:
+      - application/json
+      responses:
+        "301":
+          description: Redirect to https://www.baidu.com
+          schema:
+            type: string
+      summary: Delete Redirect
+      tags:
+      - redirect
+    get:
+      consumes:
+      - application/json
+      description: Redirect to Baidu using GET method
+      produces:
+      - application/json
+      responses:
+        "301":
+          description: Redirect to https://www.baidu.com
+          schema:
+            type: string
+      summary: Get Redirect
+      tags:
+      - redirect
+    post:
+      consumes:
+      - application/json
+      description: Redirect to Baidu using POST method
+      produces:
+      - application/json
+      responses:
+        "301":
+          description: Redirect to https://www.baidu.com
+          schema:
+            type: string
+      summary: Post Redirect
+      tags:
+      - redirect
+    put:
+      consumes:
+      - application/json
+      description: Redirect to Baidu using PUT method
+      produces:
+      - application/json
+      responses:
+        "301":
+          description: Redirect to https://www.baidu.com
+          schema:
+            type: string
+      summary: Put Redirect
+      tags:
+      - redirect
+  /reserve:
+    delete:
+      consumes:
+      - application/json
+      description: Delete reserve data from the server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H'
+      summary: Delete Reserve
+      tags:
+      - reserve
+    get:
+      consumes:
+      - application/json
+      description: Get reserve data from the server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H'
+      summary: Get Reserve
+      tags:
+      - reserve
+    post:
+      consumes:
+      - application/json
+      description: Post reserve data to the server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H'
+      summary: Post Reserve
+      tags:
+      - reserve
+    put:
+      consumes:
+      - application/json
+      description: Update reserve data on the server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_zzu-andrew_go-example_gin_master_gin.H'
+      summary: Put Reserve
+      tags:
+      - reserve
+swagger: "2.0"
