@@ -1,4 +1,4 @@
-package linux
+package concurrency
 
 import (
 	"sync"
