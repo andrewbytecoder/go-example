@@ -29,3 +29,60 @@ func Or(channels ...<-chan interface{}) <-chan interface{} {
 	}()
 	return orDone
 }
+
+// pipeline 最佳实践
+
+// Generator 将离散数据转化为数据流
+func Generator(done <-chan interface{}, values ...int) <-chan int {
+	valueStream := make(chan int)
+	go func() {
+		defer close(valueStream)
+		for _, v := range values {
+			select {
+			case <-done:
+				return
+			case valueStream <- v:
+			}
+		}
+	}()
+	return valueStream
+}
+
+// Multiply factor 乘法流水线中需要执行的数据操作
+func Multiply(done <-chan interface{}, valueStream <-chan int, factor int) <-chan int {
+	multiplyStream := make(chan int)
+	go func() {
+		defer close(multiplyStream)
+		for {
+			select {
+			case <-done:
+				return
+			case v, ok := <-valueStream:
+				if ok == false {
+					return
+				}
+				multiplyStream <- v * factor
+			}
+		}
+	}()
+	return multiplyStream
+}
+
+func Add(done <-chan interface{}, valueStream <-chan int, delta int) <-chan int {
+	addStream := make(chan int)
+	go func() {
+		defer close(addStream)
+		for {
+			select {
+			case <-done:
+				return
+			case v, ok := <-valueStream:
+				if ok == false {
+					return
+				}
+				addStream <- v + delta
+			}
+		}
+	}()
+	return addStream
+}
