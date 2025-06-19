@@ -32,6 +32,9 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
+	// 通过context向其他地方下发数据
+	//context.WithValue(ctx, "my-key", "my-value")
+
 	wg := sync.WaitGroup{}
 	// Register for SIGINT and SIGTERM
 	sigs := make(chan os.Signal, 1)

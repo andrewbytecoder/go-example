@@ -2,6 +2,7 @@ package channel
 
 // Or 复合channel 当任意一个channel关闭时，返回
 func Or(channels ...<-chan interface{}) <-chan interface{} {
+	// 根据需要可以作为散入和散出的作用，多个chan进来合并成一个channel
 	switch len(channels) {
 	case 0:
 		return nil
