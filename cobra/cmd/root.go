@@ -3,16 +3,20 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "myapp",
-	Short: "MyApp 是一个多命令服务管理工具",
-	Long:  `MyApp 模拟 kubelet，支持 start, stop, status 等命令`,
+	Use:   "cobra",
+	Short: "My Cobra Application",
+	Long:  `A longer description of my Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("欢迎使用 MyApp，输入 --help 查看可用命令")
+		// 当用户直接运行 ./cobra 或 ./cobra --help 时显示帮助
+		cmd.Help()
+		fmt.Println("rootCmd.Run")
+		time.Sleep(60 * time.Second)
 	},
 }
 
