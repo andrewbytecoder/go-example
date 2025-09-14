@@ -6,6 +6,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var name string
+
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "显示版本信息",
@@ -16,4 +18,5 @@ var versionCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(versionCmd)
+	versionCmd.Flags().StringVarP(&name, "name", "n", "", "name of the person to greet")
 }
