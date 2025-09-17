@@ -4,7 +4,7 @@ import (
 	"log"
 	"net"
 
-	pb "github.com/go-example/gRPC/helloworld/proto"
+	pb "github.com/go-example/gRPC/sendmessage/pb"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -27,7 +27,7 @@ import (
 
 // 定义server，用来实现proto文件，里面实现的Greeter服务里面的接口
 type server struct {
-	pb.UnimplementedGreeterServer
+	pb.UnimplementedSendMessageServer
 }
 
 // UnimplementedGreeterServer must be embedded to have
@@ -37,14 +37,14 @@ type server struct {
 // pointer dereference when methods are called.
 type UnimplementedGreeterServer struct{}
 
-func (server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
+func (server) SendMessage(ctx context.Context, in *pb.Request) (*pb.Response, error) {
+	log.Printf("Received: %v", in.GetName())
 	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
 }
-func (server) mustEmbedUnimplementedGreeterServer() {}
 
 func main() {
 	// 监听127.0.0.1:50051地址
-	lis, err := net.Listen("tcp", ":50051")
+	lis, err := net.Listen("tcp", ":8080")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
@@ -53,7 +53,7 @@ func main() {
 	s := grpc.NewServer()
 
 	// 注册Greeter服务
-	pb.RegisterGreeterServer(s, &server{})
+	pb.RegisterSendMessageServer(s, &server{})
 
 	// 往grpc服务端注册反射服务
 	reflection.Register(s)
