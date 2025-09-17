@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"log"
 	"net"
 	pb "zzu-andrew/helloworld/proto"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	"golang.org/x/net/context"
 	// 导入grpc包
@@ -25,7 +25,9 @@ import (
 //  protoc -I proto/ --go_out=proto --go-grpc_out=proto proto/helloworld.proto
 
 // 定义server，用来实现proto文件，里面实现的Greeter服务里面的接口
-type server struct{}
+type server struct {
+	pb.UnimplementedGreeterServer
+}
 
 // UnimplementedGreeterServer must be embedded to have
 // forward compatible implementations.
@@ -41,7 +43,7 @@ func (server) mustEmbedUnimplementedGreeterServer() {}
 
 func main() {
 	// 监听127.0.0.1:50051地址
-	lis, err := net.Listen("tcp", "127.0.0.1:50051")
+	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
