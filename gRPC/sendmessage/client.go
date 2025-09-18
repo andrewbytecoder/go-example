@@ -31,9 +31,15 @@ func main() {
 	// Contact the server and print out its response.
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	r, err := c.AddProduct(ctx, &pb.Product{Id: 1, Name: "Send message", Description: "add production"})
+	r, err := c.AddProduct(ctx, &pb.Product{Id: 1, Name: "product id is 1", Description: "add production"})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
 	log.Printf("Add product id: %d", r.Id)
+
+	p, err := c.GetProduct(ctx, &pb.ProductID{Id: 1})
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+	log.Printf("Get product: %s", p.Name)
 }

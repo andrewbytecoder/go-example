@@ -4,7 +4,8 @@
 // - protoc             v6.30.1
 // source: sendmessage.proto
 
-// 定义包名
+// 定义包名 Package names are used to prevent name clashes between protocol message types
+//and also will be used to generate code.
 
 package __
 
@@ -22,15 +23,17 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	SendMessage_AddProduct_FullMethodName = "/proto.SendMessage/addProduct"
+	SendMessage_GetProduct_FullMethodName = "/proto.SendMessage/getProduct"
 )
 
 // SendMessageClient is the client API for SendMessage service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// 定义SendMessage服务
+// 定义SendMessage服务  Defining the service interface of a gRPC service.
 type SendMessageClient interface {
 	AddProduct(ctx context.Context, in *Product, opts ...grpc.CallOption) (*ProductID, error)
+	GetProduct(ctx context.Context, in *ProductID, opts ...grpc.CallOption) (*Product, error)
 }
 
 type sendMessageClient struct {
@@ -51,13 +54,24 @@ func (c *sendMessageClient) AddProduct(ctx context.Context, in *Product, opts ..
 	return out, nil
 }
 
+func (c *sendMessageClient) GetProduct(ctx context.Context, in *ProductID, opts ...grpc.CallOption) (*Product, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Product)
+	err := c.cc.Invoke(ctx, SendMessage_GetProduct_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SendMessageServer is the server API for SendMessage service.
 // All implementations must embed UnimplementedSendMessageServer
 // for forward compatibility.
 //
-// 定义SendMessage服务
+// 定义SendMessage服务  Defining the service interface of a gRPC service.
 type SendMessageServer interface {
 	AddProduct(context.Context, *Product) (*ProductID, error)
+	GetProduct(context.Context, *ProductID) (*Product, error)
 	mustEmbedUnimplementedSendMessageServer()
 }
 
@@ -70,6 +84,9 @@ type UnimplementedSendMessageServer struct{}
 
 func (UnimplementedSendMessageServer) AddProduct(context.Context, *Product) (*ProductID, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddProduct not implemented")
+}
+func (UnimplementedSendMessageServer) GetProduct(context.Context, *ProductID) (*Product, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProduct not implemented")
 }
 func (UnimplementedSendMessageServer) mustEmbedUnimplementedSendMessageServer() {}
 func (UnimplementedSendMessageServer) testEmbeddedByValue()                     {}
@@ -110,6 +127,24 @@ func _SendMessage_AddProduct_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SendMessage_GetProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProductID)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SendMessageServer).GetProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SendMessage_GetProduct_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SendMessageServer).GetProduct(ctx, req.(*ProductID))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SendMessage_ServiceDesc is the grpc.ServiceDesc for SendMessage service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -120,6 +155,10 @@ var SendMessage_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "addProduct",
 			Handler:    _SendMessage_AddProduct_Handler,
+		},
+		{
+			MethodName: "getProduct",
+			Handler:    _SendMessage_GetProduct_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

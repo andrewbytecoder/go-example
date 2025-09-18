@@ -4,7 +4,8 @@
 // 	protoc        v6.30.1
 // source: sendmessage.proto
 
-// 定义包名
+// 定义包名 Package names are used to prevent name clashes between protocol message types
+//and also will be used to generate code.
 
 package __
 
@@ -137,10 +138,12 @@ const file_sendmessage_proto_rawDesc = "" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x03 \x01(\tR\vdescription\"\x1b\n" +
 	"\tProductID\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x05R\x02id2?\n" +
+	"\x02id\x18\x01 \x01(\x05R\x02id2q\n" +
 	"\vSendMessage\x120\n" +
 	"\n" +
-	"addProduct\x12\x0e.proto.Product\x1a\x10.proto.ProductID\"\x00B\x03Z\x01.b\x06proto3"
+	"addProduct\x12\x0e.proto.Product\x1a\x10.proto.ProductID\"\x00\x120\n" +
+	"\n" +
+	"getProduct\x12\x10.proto.ProductID\x1a\x0e.proto.Product\"\x00B\x03Z\x01.b\x06proto3"
 
 var (
 	file_sendmessage_proto_rawDescOnce sync.Once
@@ -161,9 +164,11 @@ var file_sendmessage_proto_goTypes = []any{
 }
 var file_sendmessage_proto_depIdxs = []int32{
 	0, // 0: proto.SendMessage.addProduct:input_type -> proto.Product
-	1, // 1: proto.SendMessage.addProduct:output_type -> proto.ProductID
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	1, // 1: proto.SendMessage.getProduct:input_type -> proto.ProductID
+	1, // 2: proto.SendMessage.addProduct:output_type -> proto.ProductID
+	0, // 3: proto.SendMessage.getProduct:output_type -> proto.Product
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name

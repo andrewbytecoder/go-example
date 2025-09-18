@@ -5,16 +5,25 @@ import (
 	"net"
 
 	pb "github.com/go-example/gRPC/sendmessage/pb"
-
 	"golang.org/x/net/context"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	// 导入grpc包
 	"google.golang.org/grpc"
 	// 导入刚才我们生成的代码所在的proto包。
 	"google.golang.org/grpc/reflection"
 )
 
+type Product struct {
+	Id          int32  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name        string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+}
+
 type server struct {
 	pb.UnimplementedSendMessageServer
+	products map[int32]Product
 }
 
 // UnimplementedGreeterServer must be embedded to have
@@ -24,11 +33,30 @@ type server struct {
 // pointer dereference when methods are called.
 type UnimplementedGreeterServer struct{}
 
-func (server) AddProduct(ctx context.Context, in *pb.Product) (*pb.ProductID, error) {
+func (s *server) AddProduct(ctx context.Context, in *pb.Product) (*pb.ProductID, error) {
 	log.Printf("Received: %v", in.GetName())
 	log.Println("AddProduct", in)
 
+	s.products[in.Id] = Product{
+		Id:          in.Id,
+		Name:        in.Name,
+		Description: in.Description,
+	}
+
 	return &pb.ProductID{Id: in.Id}, nil
+}
+
+func (s *server) GetProduct(ctx context.Context, in *pb.ProductID) (*pb.Product, error) {
+	product, ok := s.products[in.Id]
+	if !ok {
+		return nil, status.Error(codes.NotFound, "product not found")
+	}
+	// 如果查找到产品Id就直接返回产品ID如果查询直接返回错误原因
+	return &pb.Product{
+		Id:          product.Id,
+		Name:        product.Name,
+		Description: product.Description,
+	}, nil
 }
 
 func main() {
@@ -42,7 +70,9 @@ func main() {
 	s := grpc.NewServer()
 
 	// 注册Greeter服务
-	pb.RegisterSendMessageServer(s, &server{})
+	pb.RegisterSendMessageServer(s, &server{
+		products: make(map[int32]Product),
+	})
 
 	// 往grpc服务端注册反射服务
 	reflection.Register(s)
