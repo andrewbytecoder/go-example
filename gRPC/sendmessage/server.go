@@ -6,9 +6,6 @@ import (
 
 	pb "github.com/go-example/gRPC/sendmessage/pb"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
 	"golang.org/x/net/context"
 	// 导入grpc包
 	"google.golang.org/grpc"
@@ -16,16 +13,6 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-// # 切换到helloworld项目根目录，执行命令
-// protoc -I proto/ --go_out=plugins=grpc:proto proto/helloworld.proto
-// -I 指定代码输出目录，忽略服务定义的包名，否则会根据包名创建目录
-// --go_out 指定代码输出目录，格式：--go_out=plugins=grpc:目录名
-// 命令最后面的参数是proto协议文件
-
-// # 生成go代码
-//  protoc -I proto/ --go_out=proto --go-grpc_out=proto proto/helloworld.proto
-
-// 定义server，用来实现proto文件，里面实现的Greeter服务里面的接口
 type server struct {
 	pb.UnimplementedSendMessageServer
 }
@@ -37,9 +24,11 @@ type server struct {
 // pointer dereference when methods are called.
 type UnimplementedGreeterServer struct{}
 
-func (server) SendMessage(ctx context.Context, in *pb.Request) (*pb.Response, error) {
+func (server) AddProduct(ctx context.Context, in *pb.Product) (*pb.ProductID, error) {
 	log.Printf("Received: %v", in.GetName())
-	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
+	log.Println("AddProduct", in)
+
+	return &pb.ProductID{Id: in.Id}, nil
 }
 
 func main() {

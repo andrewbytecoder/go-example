@@ -1,5 +1,6 @@
 syntax = "proto3";
-// 定义包名
+// 定义包名 Package names are used to prevent name clashes between protocol message types
+//and also will be used to generate code.
 package proto;
 
 // protoc -I pb/ --go_out=pb --go-grpc_out=pb pb/sendmessage.proto
@@ -8,19 +9,16 @@ option go_package = "."; // 替换为你的实际项目路径
 
 // 定义SendMessage服务
 service SendMessage {
-
-  rpc SendMessage (Request) returns (Response) {}
+  rpc addProduct (Product) returns (ProductID) {}
 
 }
 
-// 定义HelloRequest消息
-message Request {
-  // name字段
-  string name = 1;
+message Product {
+  int32 id = 1;
+  string  name = 2;
+  string description = 3;
 }
 
-// 定义HelloReply消息
-message Response {
-  // message字段
-  string message = 1;
+message ProductID {
+  int32 id = 1;
 }
