@@ -21,7 +21,8 @@ const (
 func main() {
 	flag.Parse()
 	// Set up a connection to the server.
-	conn, err := grpc.NewClient(":8080", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	// 部分系统上， NewClient() 必须制定IP地址才行
+	conn, err := grpc.NewClient("127.0.0.1:8080", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
