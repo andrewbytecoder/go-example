@@ -1,9 +1,12 @@
 syntax = "proto3";
+
+
 // 定义包名 Package names are used to prevent name clashes between protocol message types
 //and also will be used to generate code.
 package proto;
 
 // protoc -I pb/ --go_out=pb --go-grpc_out=pb pb/sendmessage.proto
+
 
 option go_package = "."; // 替换为你的实际项目路径
 

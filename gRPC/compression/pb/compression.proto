@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+
+// 定义包名 Package names are used to prevent name clashes between protocol message types
+//and also will be used to generate code.
+package proto;
+
+//  protoc -I pb/ --go_out=pb --go-grpc_out=pb pb/compression.proto
+
+option go_package = "."; // 替换为你的实际项目路径
+
+// 使用 google.protobuf.StringValue 封装之后的值，这样就能为空值，如果不设置那么对端可以直接根据是否为nil判断是否这只值了，但是如果
+// 直接使用string的话，就必须设置为 "" 或者 "value" 不能设置 nil
+
+// 定义SendMessage服务  Defining the service interface of a gRPC service.
+service OrderManagement {
+  rpc addOrder(Order) returns (google.protobuf.StringValue) {}
+  rpc getOrder(google.protobuf.StringValue) returns (Order) {}
+  rpc searchOrders(google.protobuf.StringValue) returns (stream Order) {}
+  rpc updateOrders(stream Order) returns (google.protobuf.StringValue) {}
+  rpc processOrders(stream google.protobuf.StringValue) returns (stream CombinedShipment) {}
+}
+
+message Order {
+  string id = 1;
+  repeated string items = 2;
+  string description = 3;
+  float price = 4;
+  string destination = 5;
+}
+
+message CombinedShipment {
+  string id = 1;
+  string status = 2;
+  repeated Order ordersList = 3;
+}
+
