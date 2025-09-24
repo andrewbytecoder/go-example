@@ -1,0 +1,22 @@
+syntax = "proto3";
+// 定义包名
+package proto;
+
+// protoc -I pb/ --go_out=pb --go-grpc_out=pb pb/mutualtls.proto
+
+option go_package = "."; // 替换为你的实际项目路径
+service ProductInfo {
+  rpc addProduct(Product) returns (ProductID);
+  rpc getProduct(ProductID) returns (Product);
+}
+
+message Product {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  float price = 4;
+}
+
+message ProductID {
+  string value = 1;
+}

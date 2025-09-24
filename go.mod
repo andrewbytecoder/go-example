@@ -5,6 +5,7 @@ go 1.25.1
 require (
 	github.com/bsm/redislock v0.9.4
 	github.com/golang/protobuf v1.5.4
+	github.com/google/uuid v1.6.0
 	github.com/mattn/go-sqlite3 v1.14.32
 	github.com/redis/go-redis/v9 v9.14.0
 	github.com/smartystreets/goconvey v1.8.1

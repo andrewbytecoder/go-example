@@ -43,6 +43,9 @@ github.com/gogo/protobuf/protoc-gen-gogo/descriptor
 ## explicit; go 1.17
 github.com/golang/protobuf/proto
 github.com/golang/protobuf/ptypes/wrappers
+# github.com/google/uuid v1.6.0
+## explicit
+github.com/google/uuid
 # github.com/gopherjs/gopherjs v1.17.2
 ## explicit; go 1.17
 github.com/gopherjs/gopherjs/js
