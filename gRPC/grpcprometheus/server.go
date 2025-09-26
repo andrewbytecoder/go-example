@@ -9,14 +9,15 @@ import (
 	"strings"
 	"time"
 
+	"log"
+	"net"
+
 	"github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"log"
-	"net"
 	/*"github.com/golang/protobuf/ptypes/wrappers"
 	"google.golang.org/grpc"*/
 	pb "github.com/go-example/gRPC/grpcprometheus/pb"
