@@ -7,53 +7,35 @@ package main
 
 import (
 	"context"
-	"crypto/tls"
-	"crypto/x509"
+	"encoding/base64"
 	"log"
-	"os"
 	"path/filepath"
 	"time"
 
-	"google.golang.org/grpc/credentials"
-
-	pb "github.com/go-example/gRPC/mutualls/pb"
+	pb "github.com/go-example/gRPC/basicauth/pb"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 )
 
-var (
-	address       = "127.0.0.1:50051"
-	hostname      = "127.0.0.1"
-	crtFileClient = filepath.Join("certs", "client.crt")
-	keyFileClient = filepath.Join("certs", "client.key")
-	caFileClient  = filepath.Join("certs", "ca.crt")
+const (
+	address = "localhost:50051"
 )
 
 func main() {
-	// Load the client certificates from disk
-	certificate, err := tls.LoadX509KeyPair(crtFileClient, keyFileClient)
+
+	creds, err := credentials.NewClientTLSFromFile(filepath.Join("certs", "server.crt"),
+		"localhost")
 	if err != nil {
-		log.Fatalf("could not load client key pair: %s", err)
+		log.Fatalf("failed to load credentials: %v", err)
 	}
-
-	// Create a certificate pool from the certificate authority
-	certPool := x509.NewCertPool()
-	ca, err := os.ReadFile(caFileClient)
-	if err != nil {
-		log.Fatalf("could not read ca certificate: %s", err)
+	auth := basicAuth{
+		username: "admin",
+		password: "admin",
 	}
-
-	// Append the certificates from the CA
-	if ok := certPool.AppendCertsFromPEM(ca); !ok {
-		log.Fatalf("failed to append ca certs")
-	}
-
 	opts := []grpc.DialOption{
+		grpc.WithPerRPCCredentials(auth),
 		// transport credentials.
-		grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{
-			ServerName:   hostname, // NOTE: this is required!
-			Certificates: []tls.Certificate{certificate},
-			RootCAs:      certPool,
-		})),
+		grpc.WithTransportCredentials(creds),
 	}
 
 	// Set up a connection to the server.
@@ -65,7 +47,7 @@ func main() {
 	c := pb.NewProductInfoClient(conn)
 
 	// Contact the server and print out its response.
-	name := "Samsung S10"
+	name := "Sumsung S10"
 	description := "Samsung Galaxy S10 is the latest smart phone, launched in February 2019"
 	price := float32(700.0)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
@@ -80,5 +62,22 @@ func main() {
 	if err != nil {
 		log.Fatalf("Could not get product: %v", err)
 	}
-	log.Printf("Product: %s", product.String())
+	log.Printf("Product: ", product.String())
+}
+
+type basicAuth struct {
+	username string
+	password string
+}
+
+func (b basicAuth) GetRequestMetadata(ctx context.Context, in ...string) (map[string]string, error) {
+	auth := b.username + ":" + b.password
+	enc := base64.StdEncoding.EncodeToString([]byte(auth))
+	return map[string]string{
+		"authorization": "Basic " + enc,
+	}, nil
+}
+
+func (b basicAuth) RequireTransportSecurity() bool {
+	return true
 }

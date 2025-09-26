@@ -6,7 +6,9 @@ require (
 	github.com/bsm/redislock v0.9.4
 	github.com/golang/protobuf v1.5.4
 	github.com/google/uuid v1.6.0
+	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/mattn/go-sqlite3 v1.14.32
+	github.com/prometheus/client_golang v1.20.5
 	github.com/redis/go-redis/v9 v9.14.0
 	github.com/smartystreets/goconvey v1.8.1
 	github.com/spf13/cobra v1.2.1
@@ -15,6 +17,7 @@ require (
 	go.etcd.io/etcd/client/v3 v3.6.4
 	go.uber.org/zap v1.27.0
 	golang.org/x/net v0.44.0
+	golang.org/x/oauth2 v0.30.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250707201910-8d1bb00bc6a7
 	google.golang.org/grpc v1.75.1
 	google.golang.org/protobuf v1.36.9
@@ -22,9 +25,11 @@ require (
 )
 
 require (
+	cloud.google.com/go v0.81.0 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/PuerkitoBio/purell v1.1.1 // indirect
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
+	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/coreos/go-semver v0.3.1 // indirect
 	github.com/coreos/go-systemd/v22 v22.5.0 // indirect
@@ -39,7 +44,12 @@ require (
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/jtolds/gls v4.20.0+incompatible // indirect
+	github.com/klauspost/compress v1.17.9 // indirect
 	github.com/mailru/easyjson v0.7.6 // indirect
+	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
+	github.com/prometheus/client_model v0.6.1 // indirect
+	github.com/prometheus/common v0.62.0 // indirect
+	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/smarty/assertions v1.15.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/vishvananda/netns v0.0.5 // indirect
