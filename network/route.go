@@ -2,9 +2,10 @@ package main
 
 import (
 	"errors"
-	"github.com/vishvananda/netlink"
 	"net"
 	"syscall"
+
+	"github.com/vishvananda/netlink"
 )
 
 // DirectRouting 查看与对应的ip是否是直接连接
