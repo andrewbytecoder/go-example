@@ -3,6 +3,7 @@ module github.com/go-example
 go 1.25.1
 
 require (
+	github.com/bradleyjkemp/memviz v0.2.3
 	github.com/bsm/redislock v0.9.4
 	github.com/golang/protobuf v1.5.4
 	github.com/google/uuid v1.6.0
