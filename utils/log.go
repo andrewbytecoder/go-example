@@ -8,196 +8,112 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-// Logger 是我们封装的日志对象
-type Logger struct {
-	*zap.Logger
+type LogConfig struct {
+	lumberjackLogger *lumberjack.Logger // 文件日志写入器，支持自动切割
+	level            zapcore.Level      // 日志输出级别（debug/info/warn/error/fatal
+	levelKey         string             // JSON 输出中表示日志级别的字段名。
+	consoleWriter    bool               // 是否将日志输出到控制台
 }
 
-// Option 是函数式选项类型
-type Option func(*loggerConfig)
-
-// loggerConfig 日志配置项
-type loggerConfig struct {
-	filename      string
-	maxSize       int // MB
-	maxBackups    int
-	maxAge        int // days
-	compress      bool
-	localTime     bool
-	level         zapcore.Level
-	encodeAsJSON  bool
-	enableConsole bool
-	consoleLevel  zapcore.Level
-	outputPaths   []string // 自定义输出路径（文件+控制台）
-	errorPaths    []string // 错误日志输出路径
+// An Option configures a Logger.
+type Option interface {
+	apply(*LogConfig)
 }
 
-// 默认配置
-func defaultConfig() *loggerConfig {
-	return &loggerConfig{
-		filename:      "app.log",
-		maxSize:       100,  // 100 MB
-		maxBackups:    7,    // 7 个备份
-		maxAge:        30,   // 30 天
-		compress:      true, // 压缩旧日志
-		localTime:     true,
-		level:         zapcore.InfoLevel,
-		encodeAsJSON:  false,
-		enableConsole: true,
-		consoleLevel:  zapcore.WarnLevel,
-		outputPaths:   []string{"stdout"},
-		errorPaths:    []string{"stderr"},
-	}
+// optionFunc wraps a func so it satisfies the Option interface.
+type optionFunc func(*LogConfig)
+
+func (f optionFunc) apply(k *LogConfig) {
+	f(k)
 }
 
-// 选项函数：设置日志文件路径
-func WithFilename(filename string) Option {
-	return func(c *loggerConfig) {
-		if filename != "" {
-			c.filename = filename
-		}
-	}
+// SetLogFilename 设置日志文件名
+func SetLogFilename(filename string) Option {
+	return optionFunc(func(c *LogConfig) {
+		c.lumberjackLogger.Filename = filename
+	})
 }
 
-// 选项函数：设置最大文件大小（MB）
-func WithMaxSize(size int) Option {
-	return func(c *loggerConfig) {
-		if size > 0 {
-			c.maxSize = size
-		}
-	}
+// SetLogMaxSize 设置日志文件最大大小（MB）
+func SetLogMaxSize(maxSize int) Option {
+	return optionFunc(func(c *LogConfig) {
+		c.lumberjackLogger.MaxSize = maxSize
+	})
 }
 
-// 选项函数：设置最大备份文件数
-func WithMaxBackups(backups int) Option {
-	return func(c *loggerConfig) {
-		if backups >= 0 {
-			c.maxBackups = backups
-		}
-	}
+// SetLogMaxAge 设置日志文件最大保存天数
+func SetLogMaxAge(maxAge int) Option {
+	return optionFunc(func(c *LogConfig) {
+		c.lumberjackLogger.MaxAge = maxAge
+	})
 }
 
-// 选项函数：设置最大保留天数
-func WithMaxAge(days int) Option {
-	return func(c *loggerConfig) {
-		if days > 0 {
-			c.maxAge = days
-		}
-	}
+// SetLogMaxBackups 设置日志文件最大备份数
+func SetLogMaxBackups(maxBackups int) Option {
+	return optionFunc(func(c *LogConfig) {
+		c.lumberjackLogger.MaxBackups = maxBackups
+	})
 }
 
-// 选项函数：是否压缩旧日志
-func WithCompress(compress bool) Option {
-	return func(c *loggerConfig) {
-		c.compress = compress
-	}
+// SetLogCompress 设置是否压缩日志文件
+func SetLogCompress(compress bool) Option {
+	return optionFunc(func(c *LogConfig) {
+		c.lumberjackLogger.Compress = compress
+	})
 }
 
-// 选项函数：是否使用本地时间（否则用 UTC）
-func WithLocalTime(local bool) Option {
-	return func(c *loggerConfig) {
-		c.localTime = local
-	}
-}
-
-// 选项函数：设置日志级别
-func WithLevel(level zapcore.Level) Option {
-	return func(c *loggerConfig) {
+// SetLogLevel 设置日志级别
+func SetLogLevel(level zapcore.Level) Option {
+	return optionFunc(func(c *LogConfig) {
 		c.level = level
-	}
+	})
 }
 
-// 选项函数：设置控制台日志级别
-func WithConsoleLevel(level zapcore.Level) Option {
-	return func(c *loggerConfig) {
-		c.consoleLevel = level
-	}
+// SetLogLevelKey 设置日志级别字段名
+func SetLogLevelKey(levelKey string) Option {
+	return optionFunc(func(c *LogConfig) {
+		c.levelKey = levelKey
+	})
 }
 
-// 选项函数：是否以 JSON 格式输出
-func WithJSONFormat() Option {
-	return func(c *loggerConfig) {
-		c.encodeAsJSON = true
-	}
+func SetConsoleWriterSyncer(consoleWriter bool) Option {
+	return optionFunc(func(c *LogConfig) {
+		c.consoleWriter = consoleWriter
+	})
 }
 
-// 选项函数：禁用控制台输出
-func WithoutConsole() Option {
-	return func(c *loggerConfig) {
-		c.enableConsole = false
-	}
-}
-
-// 选项函数：自定义输出路径（可覆盖文件和控制台）
-func WithOutputPaths(paths ...string) Option {
-	return func(c *loggerConfig) {
-		c.outputPaths = paths
-	}
-}
-
-// 选项函数：自定义错误日志路径
-func WithErrorPaths(paths ...string) Option {
-	return func(c *loggerConfig) {
-		c.errorPaths = paths
-	}
-}
-
-// NewLogger 创建一个新的日志实例
-func NewLogger(opts ...Option) (*Logger, error) {
-	cfg := defaultConfig()
-
-	// 应用所有选项
-	for _, opt := range opts {
-		opt(cfg)
+// CreateProductZapLogger 创建一个生产级别的 zap 日志记录器。
+func CreateProductZapLogger(op ...Option) (*zap.Logger, error) {
+	logConfig := &LogConfig{
+		lumberjackLogger: &lumberjack.Logger{},
 	}
 
-	// 创建 lumberjack writer
-	lumberjackLogger := &lumberjack.Logger{
-		Filename:   cfg.filename,
-		MaxSize:    cfg.maxSize,
-		MaxBackups: cfg.maxBackups,
-		MaxAge:     cfg.maxAge,
-		Compress:   cfg.compress,
-		LocalTime:  cfg.localTime,
+	for _, opt := range op {
+		opt.apply(logConfig)
 	}
 
-	// 构建 zap 的核心 encoder config
-	var encoder zapcore.Encoder
-	if cfg.encodeAsJSON {
-		encoder = zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig())
+	// 创建 zap 的核心配置
+	fileWriteSyncer := zapcore.AddSync(logConfig.lumberjackLogger)
+
+	var multiWriteSyncer zapcore.WriteSyncer
+	// 组合写入器
+	if logConfig.consoleWriter {
+		consoleWriteSyncer := zapcore.AddSync(os.Stdout)
+		multiWriteSyncer = zapcore.NewMultiWriteSyncer(fileWriteSyncer, consoleWriteSyncer)
 	} else {
-		encoderConfig := zap.NewDevelopmentEncoderConfig()
-		encoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder // 彩色输出
-		encoder = zapcore.NewConsoleEncoder(encoderConfig)
+		multiWriteSyncer = zapcore.NewMultiWriteSyncer(fileWriteSyncer)
 	}
 
-	// 构建写入目标
-	var cores []zapcore.Core
+	encoderConfig := zap.NewProductionEncoderConfig()
+	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder // 时间格式
+	encoderConfig.LevelKey = logConfig.levelKey
+	core := zapcore.NewCore(
+		zapcore.NewJSONEncoder(encoderConfig), // 使用 JSON 格式编码日志
+		multiWriteSyncer,
+		logConfig.level, // 设置日志级别
+	)
 
-	// 1. 文件写入（所有级别）
-	fileCore := zapcore.NewCore(encoder, zapcore.AddSync(lumberjackLogger), cfg.level)
-	cores = append(cores, fileCore)
-
-	// 2. 控制台输出（可选，且可设不同级别）
-	if cfg.enableConsole {
-		consoleWriter := zapcore.AddSync(os.Stdout)
-		consoleCore := zapcore.NewCore(encoder, consoleWriter, cfg.consoleLevel)
-		cores = append(cores, consoleCore)
-	}
-
-	// 合并所有 core
-	multiCore := zapcore.NewTee(cores...)
-
-	// 构建 zap.Logger
-	zapLogger := zap.New(multiCore, zap.AddCaller(), zap.AddStacktrace(zapcore.ErrorLevel))
-
-	return &Logger{zapLogger}, nil
+	// 创建 zap logger
+	logger := zap.New(core, zap.AddCaller()) // 添加调用者信息
+	return logger, nil
 }
-
-// Close 关闭日志（关闭 lumberjack 文件句柄）
-func (l *Logger) Close() error {
-	// zap.Logger 同步时会 flush 所有写入器
-	return l.Sync()
-}
-
-// 使用示例中会展示如何调用 Close
