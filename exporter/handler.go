@@ -17,20 +17,21 @@ import (
 // created on the fly, if filtering is requested. Create instances with
 // newHandler.
 type handler struct {
-	unfilteredHandler http.Handler
+	handler http.Handler
+
+	includeExporterMetrics bool
 	// exporterMetricsRegistry is a separate registry for the metrics about
 	// the exporter itself.
 	exporterMetricsRegistry *prometheus.Registry
-	includeExporterMetrics  bool
 
-	maxRequests int
-	metricsPath string
-	logger      *zap.Logger
+	maxRequests  int
+	metricsPaths []string
+	logger       *zap.Logger
 }
 
 // ServeHTTP implements http.Handler.
 func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.unfilteredHandler.ServeHTTP(w, r)
+	h.handler.ServeHTTP(w, r)
 	return
 }
 
@@ -81,7 +82,7 @@ func (h *handler) innerHandler() (http.Handler, error) {
 // SetMetricsPath 设置 metricsPath
 func SetMetricsPath(metricsPath string) options.Option {
 	return func(c interface{}) {
-		c.(*handler).metricsPath = metricsPath
+		c.(*handler).metricsPath = append(c.(*handler).metricsPath, metricsPath)
 	}
 }
 
@@ -124,10 +125,12 @@ func Start(engine *gin.Engine, opts ...options.Option) error {
 		h.logger.Error("Couldn't create metrics handler", zap.Error(err))
 		return err
 	} else {
-		h.unfilteredHandler = innerHandler
+		h.handler = innerHandler
 	}
 
 	metricsGroup := engine.Group("")
-	metricsGroup.GET(h.metricsPath, gin.WrapH(h))
+	for _, path := range h.metricsPaths {
+		metricsGroup.GET(path, gin.WrapH(h))
+	}
 	return nil
 }

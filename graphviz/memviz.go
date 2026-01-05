@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"io/ioutil"
+	"os"
 
 	"github.com/bradleyjkemp/memviz"
 )
@@ -39,7 +39,7 @@ func main() {
 
 	buf := &bytes.Buffer{}
 	memviz.Map(buf, &root)
-	err := ioutil.WriteFile("example-tree-data", buf.Bytes(), 0644)
+	err := os.WriteFile("example-tree-data", buf.Bytes(), 0644)
 	if err != nil {
 		panic(err)
 	}

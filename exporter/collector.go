@@ -39,11 +39,10 @@ type Collector interface {
 }
 
 var (
-	factories      = make(map[string]func(logger *zap.Logger) (Collector, error))
-	collectorState = make(map[string]*bool)
+	factories = make(map[string]func(logger *zap.Logger) (Collector, error))
 )
 
-func registerCollector(collector string, isDefaultEnabled bool, factory func(logger *zap.Logger) (Collector, error)) {
+func registerCollector(collector string, factory func(logger *zap.Logger) (Collector, error)) {
 	factories[collector] = factory
 }
 
@@ -111,7 +110,9 @@ func execute(name string, c Collector, ch chan<- prometheus.Metric, logger *zap.
 		logger.Debug("collector succeeded", zap.String("name", name), zap.Float64("duration_seconds", duration.Seconds()))
 		success = 1
 	}
+	// 每次执行抓取的耗时
 	ch <- prometheus.MustNewConstMetric(scrapeDurationDesc, prometheus.GaugeValue, duration.Seconds(), name)
+	// 每次执行抓取数据是否成功在指标
 	ch <- prometheus.MustNewConstMetric(scrapeSuccessDesc, prometheus.GaugeValue, success, name)
 }
 
