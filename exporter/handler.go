@@ -82,7 +82,7 @@ func (h *handler) innerHandler() (http.Handler, error) {
 // SetMetricsPath 设置 metricsPath
 func SetMetricsPath(metricsPath string) options.Option {
 	return func(c interface{}) {
-		c.(*handler).metricsPath = append(c.(*handler).metricsPath, metricsPath)
+		c.(*handler).metricsPaths = append(c.(*handler).metricsPaths, metricsPath)
 	}
 }
 
