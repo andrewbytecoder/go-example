@@ -113,6 +113,10 @@ func Start(engine *gin.Engine, opts ...options.Option) error {
 		opt(h)
 	}
 
+	h.logger.WithOptions(zap.AddCallerSkip(1))
+
+	h.logger.Info("starting exporter", zap.String("metricsPath", h.metricsPaths[0]))
+
 	// 如果需要包含 exporter 监控，创建exporter监控器
 	if h.includeExporterMetrics {
 		h.exporterMetricsRegistry = prometheus.NewRegistry()

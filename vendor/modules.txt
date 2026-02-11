@@ -10,15 +10,6 @@ github.com/PuerkitoBio/purell
 # github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578
 ## explicit
 github.com/PuerkitoBio/urlesc
-# github.com/alecthomas/kingpin/v2 v2.4.0
-## explicit; go 1.17
-github.com/alecthomas/kingpin/v2
-# github.com/alecthomas/units v0.0.0-20240927000941-0f3dac36c52b
-## explicit; go 1.15
-github.com/alecthomas/units
-# github.com/beevik/ntp v1.5.0
-## explicit; go 1.24.0
-github.com/beevik/ntp
 # github.com/beorn7/perks v1.0.1
 ## explicit; go 1.11
 github.com/beorn7/perks/quantile
@@ -84,22 +75,10 @@ github.com/cloudwego/base64x/internal/rt
 github.com/coreos/go-semver/semver
 # github.com/coreos/go-systemd/v22 v22.6.0
 ## explicit; go 1.23
-github.com/coreos/go-systemd/v22/activation
-github.com/coreos/go-systemd/v22/dbus
 github.com/coreos/go-systemd/v22/journal
-# github.com/dennwc/btrfs v0.0.0-20241002142654-12ae127e0bf6
-## explicit; go 1.12
-github.com/dennwc/btrfs
-github.com/dennwc/btrfs/mtab
-# github.com/dennwc/ioctl v1.0.0
-## explicit
-github.com/dennwc/ioctl
 # github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f
 ## explicit
 github.com/dgryski/go-rendezvous
-# github.com/ema/qdisc v1.0.0
-## explicit; go 1.18
-github.com/ema/qdisc
 # github.com/gabriel-vasile/mimetype v1.4.8
 ## explicit; go 1.20
 github.com/gabriel-vasile/mimetype
@@ -161,9 +140,6 @@ github.com/goccy/go-yaml/parser
 github.com/goccy/go-yaml/printer
 github.com/goccy/go-yaml/scanner
 github.com/goccy/go-yaml/token
-# github.com/godbus/dbus/v5 v5.1.0
-## explicit; go 1.12
-github.com/godbus/dbus/v5
 # github.com/gogo/protobuf v1.3.2
 ## explicit; go 1.15
 github.com/gogo/protobuf/gogoproto
@@ -173,13 +149,6 @@ github.com/gogo/protobuf/protoc-gen-gogo/descriptor
 ## explicit; go 1.17
 github.com/golang/protobuf/proto
 github.com/golang/protobuf/ptypes/wrappers
-# github.com/google/go-cmp v0.7.0
-## explicit; go 1.21
-github.com/google/go-cmp/cmp
-github.com/google/go-cmp/cmp/internal/diff
-github.com/google/go-cmp/cmp/internal/flags
-github.com/google/go-cmp/cmp/internal/function
-github.com/google/go-cmp/cmp/internal/value
 # github.com/google/uuid v1.6.0
 ## explicit
 github.com/google/uuid
@@ -192,15 +161,6 @@ github.com/grpc-ecosystem/go-grpc-prometheus
 # github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.3
 ## explicit; go 1.23.0
 github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options
-# github.com/hashicorp/go-envparse v0.1.0
-## explicit; go 1.13
-github.com/hashicorp/go-envparse
-# github.com/hodgesds/perf-utils v0.7.0
-## explicit; go 1.14
-github.com/hodgesds/perf-utils
-# github.com/illumos/go-kstat v0.0.0-20210513183136-173c9b0a9973
-## explicit
-github.com/illumos/go-kstat
 # github.com/inconshreveable/mousetrap v1.0.0
 ## explicit
 github.com/inconshreveable/mousetrap
@@ -237,14 +197,6 @@ github.com/jinzhu/now
 # github.com/josharian/intern v1.0.0
 ## explicit; go 1.5
 github.com/josharian/intern
-# github.com/jpillora/backoff v1.0.0
-## explicit; go 1.13
-github.com/jpillora/backoff
-# github.com/jsimonetti/rtnetlink/v2 v2.0.5
-## explicit; go 1.23.0
-github.com/jsimonetti/rtnetlink/v2
-github.com/jsimonetti/rtnetlink/v2/internal/unix
-github.com/jsimonetti/rtnetlink/v2/rtnl
 # github.com/json-iterator/go v1.1.12
 ## explicit; go 1.12
 github.com/json-iterator/go
@@ -263,9 +215,6 @@ github.com/leodido/go-urn/scim/schema
 github.com/lib/pq
 github.com/lib/pq/oid
 github.com/lib/pq/scram
-# github.com/lufia/iostat v1.2.1
-## explicit; go 1.14
-github.com/lufia/iostat
 # github.com/mailru/easyjson v0.7.6
 ## explicit; go 1.12
 github.com/mailru/easyjson/buffer
@@ -277,28 +226,6 @@ github.com/mattn/go-isatty
 # github.com/mattn/go-sqlite3 v1.14.32
 ## explicit; go 1.19
 github.com/mattn/go-sqlite3
-# github.com/mattn/go-xmlrpc v0.0.3
-## explicit; go 1.10
-github.com/mattn/go-xmlrpc
-# github.com/mdlayher/ethtool v0.5.0
-## explicit; go 1.24.0
-github.com/mdlayher/ethtool
-# github.com/mdlayher/genetlink v1.3.2
-## explicit; go 1.18
-github.com/mdlayher/genetlink
-# github.com/mdlayher/netlink v1.8.0
-## explicit; go 1.23.0
-github.com/mdlayher/netlink
-github.com/mdlayher/netlink/nlenc
-# github.com/mdlayher/socket v0.5.1
-## explicit; go 1.20
-github.com/mdlayher/socket
-# github.com/mdlayher/vsock v1.2.1
-## explicit; go 1.20
-github.com/mdlayher/vsock
-# github.com/mdlayher/wifi v0.6.0
-## explicit; go 1.23.0
-github.com/mdlayher/wifi
 # github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
 ## explicit
 github.com/modern-go/concurrent
@@ -308,13 +235,6 @@ github.com/modern-go/reflect2
 # github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822
 ## explicit
 github.com/munnerz/goautoneg
-# github.com/mwitkow/go-conntrack v0.0.0-20190716064945-2f068394615f
-## explicit
-github.com/mwitkow/go-conntrack
-# github.com/opencontainers/selinux v1.12.0
-## explicit; go 1.19
-github.com/opencontainers/selinux/go-selinux
-github.com/opencontainers/selinux/pkg/pwalkdir
 # github.com/pelletier/go-toml/v2 v2.2.4
 ## explicit; go 1.21.0
 github.com/pelletier/go-toml/v2
@@ -322,19 +242,15 @@ github.com/pelletier/go-toml/v2/internal/characters
 github.com/pelletier/go-toml/v2/internal/danger
 github.com/pelletier/go-toml/v2/internal/tracker
 github.com/pelletier/go-toml/v2/unstable
-# github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55
-## explicit; go 1.14
-github.com/power-devops/perfstat
-# github.com/prometheus-community/go-runit v0.1.0
-## explicit; go 1.20
-github.com/prometheus-community/go-runit/runit
+# github.com/petermattis/goid v0.0.0-20260113132338-7c7de50cc741
+## explicit; go 1.17
+github.com/petermattis/goid
 # github.com/prometheus/client_golang v1.23.2
 ## explicit; go 1.23.0
 github.com/prometheus/client_golang/internal/github.com/golang/gddo/httputil
 github.com/prometheus/client_golang/internal/github.com/golang/gddo/httputil/header
 github.com/prometheus/client_golang/prometheus
 github.com/prometheus/client_golang/prometheus/collectors
-github.com/prometheus/client_golang/prometheus/collectors/version
 github.com/prometheus/client_golang/prometheus/internal
 github.com/prometheus/client_golang/prometheus/promhttp
 github.com/prometheus/client_golang/prometheus/promhttp/internal
@@ -343,31 +259,13 @@ github.com/prometheus/client_golang/prometheus/promhttp/internal
 github.com/prometheus/client_model/go
 # github.com/prometheus/common v0.67.1
 ## explicit; go 1.24.0
-github.com/prometheus/common/config
 github.com/prometheus/common/expfmt
 github.com/prometheus/common/model
-github.com/prometheus/common/promslog
-github.com/prometheus/common/promslog/flag
-github.com/prometheus/common/version
-# github.com/prometheus/exporter-toolkit v0.14.1
-## explicit; go 1.23.0
-github.com/prometheus/exporter-toolkit/web
-github.com/prometheus/exporter-toolkit/web/kingpinflag
-# github.com/prometheus/node_exporter v1.10.2
-## explicit; go 1.24.0
-github.com/prometheus/node_exporter/collector
-github.com/prometheus/node_exporter/collector/utils
 # github.com/prometheus/procfs v0.19.0
 ## explicit; go 1.24.0
 github.com/prometheus/procfs
-github.com/prometheus/procfs/bcache
-github.com/prometheus/procfs/blockdevice
-github.com/prometheus/procfs/btrfs
 github.com/prometheus/procfs/internal/fs
 github.com/prometheus/procfs/internal/util
-github.com/prometheus/procfs/nfs
-github.com/prometheus/procfs/sysfs
-github.com/prometheus/procfs/xfs
 # github.com/quic-go/qpack v0.5.1
 ## explicit; go 1.22
 github.com/quic-go/qpack
@@ -398,9 +296,6 @@ github.com/redis/go-redis/v9/internal/pool
 github.com/redis/go-redis/v9/internal/proto
 github.com/redis/go-redis/v9/internal/rand
 github.com/redis/go-redis/v9/internal/util
-# github.com/safchain/ethtool v0.6.2
-## explicit; go 1.23.0
-github.com/safchain/ethtool
 # github.com/smarty/assertions v1.15.0
 ## explicit; go 1.18
 github.com/smarty/assertions
@@ -443,9 +338,6 @@ github.com/twitchyliquid64/golang-asm/unsafeheader
 # github.com/ugorji/go/codec v1.3.0
 ## explicit; go 1.21
 github.com/ugorji/go/codec
-# github.com/xhit/go-str2duration/v2 v2.1.0
-## explicit; go 1.13
-github.com/xhit/go-str2duration/v2
 # go.etcd.io/etcd/api/v3 v3.6.4
 ## explicit; go 1.23.0
 go.etcd.io/etcd/api/v3/authpb
@@ -498,8 +390,6 @@ go.yaml.in/yaml/v2
 golang.org/x/arch/x86/x86asm
 # golang.org/x/crypto v0.42.0
 ## explicit; go 1.24.0
-golang.org/x/crypto/bcrypt
-golang.org/x/crypto/blowfish
 golang.org/x/crypto/chacha20
 golang.org/x/crypto/chacha20poly1305
 golang.org/x/crypto/hkdf
@@ -507,9 +397,6 @@ golang.org/x/crypto/internal/alias
 golang.org/x/crypto/internal/poly1305
 golang.org/x/crypto/pbkdf2
 golang.org/x/crypto/sha3
-# golang.org/x/exp v0.0.0-20250911091902-df9299821621
-## explicit; go 1.24.0
-golang.org/x/exp/maps
 # golang.org/x/mod v0.28.0
 ## explicit; go 1.24.0
 golang.org/x/mod/internal/lazyregexp
@@ -523,7 +410,6 @@ golang.org/x/net/context
 golang.org/x/net/html
 golang.org/x/net/html/atom
 golang.org/x/net/http/httpguts
-golang.org/x/net/http/httpproxy
 golang.org/x/net/http2
 golang.org/x/net/http2/h2c
 golang.org/x/net/http2/hpack
@@ -539,7 +425,6 @@ golang.org/x/net/trace
 ## explicit; go 1.24.0
 golang.org/x/oauth2
 golang.org/x/oauth2/authhandler
-golang.org/x/oauth2/clientcredentials
 golang.org/x/oauth2/google
 golang.org/x/oauth2/google/externalaccount
 golang.org/x/oauth2/google/internal/externalaccountauthorizeduser
@@ -738,6 +623,3 @@ gorm.io/gorm/logger
 gorm.io/gorm/migrator
 gorm.io/gorm/schema
 gorm.io/gorm/utils
-# howett.net/plist v1.0.1
-## explicit; go 1.12
-howett.net/plist
