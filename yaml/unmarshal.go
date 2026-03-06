@@ -14,8 +14,9 @@ type BaseConfig struct {
 
 // ServerConfig 具体配置结构 A
 type ServerConfig struct {
-	Port int    `yaml:"port"`
-	Host string `yaml:"host"`
+	ExternalLabels Labels `yaml:"external_labels"`
+	Port           int    `yaml:"port"`
+	Host           string `yaml:"host"`
 }
 
 // DatabaseConfig 具体配置结构 B
