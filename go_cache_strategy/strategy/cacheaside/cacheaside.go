@@ -6,9 +6,9 @@ import (
 	"log"
 	"time"
 
-	"cachestrategysdemo/internal/cache"
-	"cachestrategysdemo/internal/database"
-	"cachestrategysdemo/internal/models"
+	"github.com/go-example/go_cache_strategy/internal/cache"
+	"github.com/go-example/go_cache_strategy/internal/database"
+	"github.com/go-example/go_cache_strategy/internal/models"
 )
 
 // 使用总结： 先从cache获取，如果获取不到再从db获取，如果db获取不到 返回nil 如果db能获取到，则更新cache

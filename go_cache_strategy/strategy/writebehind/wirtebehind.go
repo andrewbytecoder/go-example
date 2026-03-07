@@ -7,9 +7,9 @@ import (
 	"sync"
 	"time"
 
-	"cachestrategysdemo/internal/cache"
-	"cachestrategysdemo/internal/database"
-	"cachestrategysdemo/internal/models"
+	"github.com/go-example/go_cache_strategy/internal/cache"
+	"github.com/go-example/go_cache_strategy/internal/database"
+	"github.com/go-example/go_cache_strategy/internal/models"
 )
 
 const defaultQueueSize = 100

@@ -8,16 +8,16 @@ import (
 	"time"
 
 	// Import internal packages
-	"cachestrategysdemo/internal/cache"
-	"cachestrategysdemo/internal/database"
-	"cachestrategysdemo/internal/models"
+	"github.com/go-example/go_cache_strategy/internal/cache"
+	"github.com/go-example/go_cache_strategy/internal/database"
+	"github.com/go-example/go_cache_strategy/internal/models"
 
 	// Import strategy packages
-	"cachestrategysdemo/strategy/cacheaside"
-	"cachestrategysdemo/strategy/readthrough"
-	"cachestrategysdemo/strategy/writearound"
-	"cachestrategysdemo/strategy/writebehind"
-	"cachestrategysdemo/strategy/writethrough"
+	"github.com/go-example/go_cache_strategy/strategy/cacheaside"
+	"github.com/go-example/go_cache_strategy/strategy/readthrough"
+	"github.com/go-example/go_cache_strategy/strategy/writearound"
+	"github.com/go-example/go_cache_strategy/strategy/writebehind"
+	"github.com/go-example/go_cache_strategy/strategy/writethrough"
 )
 
 const userCacheKeyPrefix = "user:"
