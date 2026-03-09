@@ -3,8 +3,10 @@ package utils
 import (
 	"os"
 
+	"github.com/petermattis/goid"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
@@ -82,6 +84,23 @@ func SetConsoleWriterSyncer(consoleWriter bool) Option {
 	})
 }
 
+type gidCore struct {
+	zapcore.Core
+}
+
+func (g gidCore) Enabled(lvl zapcore.Level) bool {
+	return g.Core.Enabled(lvl)
+}
+
+func (g gidCore) With(fields []zapcore.Field) zapcore.Core {
+	fields = append(fields, zap.Int64("gid", goid.Get()))
+	return g.Core.With(fields)
+}
+
+func (g gidCore) Check(ent zapcore.Entry, ce *zapcore.CheckedEntry) *zapcore.CheckedEntry {
+	return g.Core.Check(ent, ce)
+}
+
 // CreateProductZapLogger 创建一个生产级别的 zap 日志记录器。
 func CreateProductZapLogger(op ...Option) (*zap.Logger, error) {
 	logConfig := &LogConfig{
@@ -114,6 +133,6 @@ func CreateProductZapLogger(op ...Option) (*zap.Logger, error) {
 	)
 
 	// 创建 zap logger
-	logger := zap.New(core, zap.AddCaller()) // 添加调用者信息
+	logger := zap.New(gidCore{core}, zap.AddCaller()) // 添加调用者信息
 	return logger, nil
 }

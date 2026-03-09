@@ -6,8 +6,8 @@ import (
 	"log"
 	"time"
 
-	"cachestrategysdemo/internal/cache"
-	"cachestrategysdemo/internal/database"
+	"github.com/go-example/go_cache_strategy/internal/cache"
+	"github.com/go-example/go_cache_strategy/internal/database"
 )
 
 // LoaderFunc defines the function signature for loading data on cache miss.

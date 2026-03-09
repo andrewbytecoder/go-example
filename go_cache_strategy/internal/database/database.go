@@ -8,7 +8,7 @@ import (
 	"log"
 
 	// Needed for LogEntry
-	"cachestrategysdemo/internal/models" // Adjust import path based on your module name
+	"github.com/go-example/go_cache_strategy/internal/models" // Adjust import path based on your module name
 
 	_ "github.com/mattn/go-sqlite3"
 )

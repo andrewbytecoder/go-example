@@ -6,9 +6,9 @@ import (
 	"log"
 	"time"
 
-	"cachestrategysdemo/internal/cache"    // Adjust path
-	"cachestrategysdemo/internal/database" // Adjust path
-	"cachestrategysdemo/internal/models"   // Adjust path
+	"github.com/go-example/go_cache_strategy/internal/cache"    // Adjust path
+	"github.com/go-example/go_cache_strategy/internal/database" // Adjust path
+	"github.com/go-example/go_cache_strategy/internal/models"   // Adjust path
 )
 
 // UpdateUser updates user info using Write-Through strategy.
