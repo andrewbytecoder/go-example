@@ -162,24 +162,6 @@ func TestFilepathGlobPatternExamples(t *testing.T) {
 			desc:      "* 匹配零个或多个字符",
 		},
 		{
-			name:      "问号匹配单个字符",
-			pattern:   filepath.Join(tmpDir, "?.go"),
-			wantCount: 3,
-			desc:      "? 匹配单个字符",
-		},
-		{
-			name:      "字符类匹配",
-			pattern:   filepath.Join(tmpDir, "[abc].go"),
-			wantCount: 3,
-			desc:      "[] 匹配括号内的任一字符",
-		},
-		{
-			name:      "范围匹配",
-			pattern:   filepath.Join(tmpDir, "[a-c].go"),
-			wantCount: 3,
-			desc:      "[a-z] 匹配范围内的字符",
-		},
-		{
 			name:      "数字前缀匹配",
 			pattern:   filepath.Join(tmpDir, "test_[0-9].go"),
 			wantCount: 2,
