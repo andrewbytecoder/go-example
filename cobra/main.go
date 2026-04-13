@@ -2,7 +2,7 @@
 package main
 
 import (
-	"go-example/cobra/cmd"
+	"github.com/go-example/cobra/cmd"
 )
 
 func main() {
