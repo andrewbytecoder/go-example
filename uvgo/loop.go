@@ -1,7 +1,8 @@
 // Package uvgo provides a minimal Go analogue of libuv’s event loop,
-// TCP listen/accept path (uv_tcp_t + uv_listen), and repeating/one-shot
-// timers (uv_timer_t). It is not API-compatible with libuv; it mirrors the
-// ideas with idiomatic Go and the standard library.
+// TCP listen/accept (uv_tcp_t + uv_listen), UDP (uv_udp_t), repeating/one-shot
+// timers (uv_timer_t), stat-based file polling (uv_fs_poll_t), uv_run phases,
+// and loop metadata (uv_loop_init / uv_now / uv_stop). It is not API-compatible
+// with libuv.
 package uvgo
 
 import (
@@ -9,17 +10,32 @@ import (
 	"errors"
 	"net"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
-// Loop is the rough equivalent of uv_loop_t: one goroutine runs Run and
-// dispatches accepted connections and timer callbacks sequentially.
+// Loop is the rough equivalent of uv_loop_t: one goroutine runs Run / RunMode and
+// dispatches work in uv_run order (pending → idle → prepare → poll → check).
 type Loop struct {
 	ctx    context.Context
 	cancel context.CancelFunc
 
-	mu      sync.Mutex
-	stopped bool
+	createdAt time.Time
+
+	mu       sync.Mutex
+	stopped  bool
+	stopFlag atomic.Bool
+
+	timerOnce sync.Once
+
+	cachedNow atomic.Uint64
+
+	pendingQ chan func()
+
+	prepareHooks []*phaseHook
+	idleHooks    []*phaseHook
+	checkHooks   []*phaseHook
+
 	acceptQ chan net.Conn
 	fire    chan *timerHandle
 
@@ -28,6 +44,12 @@ type Loop struct {
 	timerWake chan struct{}
 
 	onTCPConn func(net.Conn)
+
+	fspollQ chan *fspollJob
+
+	udpIn       chan udpInbound
+	udpSendDone chan udpSendDone
+	udps        []*UDP
 
 	wg sync.WaitGroup
 }
@@ -38,17 +60,52 @@ func NewLoop(ctx context.Context) *Loop {
 		ctx = context.Background()
 	}
 	ctx, cancel := context.WithCancel(ctx)
-	return &Loop{
-		ctx:       ctx,
-		cancel:    cancel,
-		acceptQ:   make(chan net.Conn, 64),
-		fire:      make(chan *timerHandle, 32),
-		timerWake: make(chan struct{}, 1),
+	l := &Loop{
+		createdAt:   time.Now(),
+		ctx:         ctx,
+		cancel:      cancel,
+		pendingQ:    make(chan func(), 1024),
+		acceptQ:     make(chan net.Conn, 64),
+		fire:        make(chan *timerHandle, 32),
+		timerWake:   make(chan struct{}, 1),
+		fspollQ:     make(chan *fspollJob, 64),
+		udpIn:       make(chan udpInbound, 256),
+		udpSendDone: make(chan udpSendDone, 64),
+	}
+	l.UpdateTime()
+	return l
+}
+
+func (l *Loop) startTimerScheduler() {
+	l.timerOnce.Do(func() {
+		l.wg.Add(1)
+		go func() {
+			defer l.wg.Done()
+			l.timerScheduler()
+		}()
+	})
+}
+
+// shutdownSockets closes TCP listeners and UDP handles (unix loop teardown +
+// open handles). Safe to call multiple times.
+func (l *Loop) shutdownSockets() {
+	l.mu.Lock()
+	ls := l.listeners
+	l.listeners = nil
+	udps := l.udps
+	l.udps = nil
+	l.mu.Unlock()
+
+	for _, ln := range ls {
+		_ = ln.Close()
+	}
+	for _, u := range udps {
+		_ = u.Close()
 	}
 }
 
-// Stop closes listeners and cancels the loop context. Safe to call from any
-// goroutine; Run will return after draining pending work.
+// Stop closes listeners and UDP handles, cancels the loop context, and matches
+// a full uv_loop_close preparation step for this subset.
 func (l *Loop) Stop() {
 	l.mu.Lock()
 	if l.stopped {
@@ -56,60 +113,10 @@ func (l *Loop) Stop() {
 		return
 	}
 	l.stopped = true
-	ls := l.listeners
-	l.listeners = nil
 	l.mu.Unlock()
 
-	for _, ln := range ls {
-		_ = ln.Close()
-	}
+	l.shutdownSockets()
 	l.cancel()
-}
-
-// Run processes accepts and timers until Stop or ctx cancel. Callbacks run
-// on the same goroutine as Run (like libuv’s default thread model).
-func (l *Loop) Run() error {
-	l.wg.Add(1)
-	go func() {
-		defer l.wg.Done()
-		l.timerScheduler()
-	}()
-
-	for {
-		select {
-		case <-l.ctx.Done():
-			l.drainAccepts()
-			l.wg.Wait()
-			if errors.Is(l.ctx.Err(), context.Canceled) {
-				return nil
-			}
-			return l.ctx.Err()
-
-		case c := <-l.acceptQ:
-			if c == nil {
-				continue
-			}
-			if l.onTCPConn != nil {
-				l.onTCPConn(c)
-			} else {
-				_ = c.Close()
-			}
-
-		case th := <-l.fire:
-			if th == nil || !th.active {
-				continue
-			}
-			if th.cb != nil {
-				th.cb()
-			}
-			if th.repeat > 0 {
-				th.next = time.Now().Add(th.repeat)
-				l.rescheduleTimer(th)
-			} else {
-				th.active = false
-			}
-		}
-	}
 }
 
 func (l *Loop) drainAccepts() {
@@ -118,6 +125,27 @@ func (l *Loop) drainAccepts() {
 		case c := <-l.acceptQ:
 			if c != nil {
 				_ = c.Close()
+			}
+		default:
+			return
+		}
+	}
+}
+
+func (l *Loop) drainUDPQueuesNoop() {
+	for {
+		select {
+		case <-l.udpIn:
+		default:
+			goto send
+		}
+	}
+send:
+	for {
+		select {
+		case d := <-l.udpSendDone:
+			if d.cb != nil {
+				d.cb(d.err)
 			}
 		default:
 			return
