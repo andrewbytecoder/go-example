@@ -6,7 +6,7 @@
 
 // 定义包名
 
-package __
+package proto
 
 import (
 	context "context"

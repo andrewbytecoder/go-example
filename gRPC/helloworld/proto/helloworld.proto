@@ -1,10 +1,20 @@
-syntax = "proto3";
+syntax = "proto3";    // 协议版本
 // 定义包名
 package proto;
 
-// protoc -I proto/ --go_out=proto --go-grpc_out=proto proto/helloworld.proto
 
-option go_package = "."; // 替换为你的实际项目路径
+// 指定相对目录，否则会按照go_package指定的路径进行生成
+// protoc -I proto/ --go_out=proto --go_opt=paths=source_relative --go-grpc_out=proto --go-grpc_opt=paths=source_relative  proto/helloworld.proto
+
+// 格式 .;包名
+//本地开发或者单体应用中使用，不适合跨项目使用，分号前是导入路径， .代表当前路径，分号后是包名
+// option go_package = ".;proto"; // 替换为你的实际项目路径
+
+
+// 当 protoc 编译器生成 .pb.go 文件时，会根据 go_package 设置来确定 Go 文件的 package 名称
+// 其他 Go 项目引用生成的代码时，需要使用这个路径作为 import 路径
+option go_package = "github.com/go-example/gRPC/helloworld/proto"; // 替换为你的实际项目路径
+
 
 // 定义Greeter服务
 service Greeter {
@@ -16,6 +26,12 @@ service Greeter {
 message HelloRequest {
   // name字段
   string name = 1;
+  repeated  int32 age = 2;
+//   oneof 用于指定一个字段，该字段用户端只能选择一个
+  oneof payment {
+    string credit_card = 3;
+    string cash = 4;
+  }
 }
 
 // 定义HelloReply消息

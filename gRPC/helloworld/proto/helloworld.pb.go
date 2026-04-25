@@ -6,7 +6,7 @@
 
 // 定义包名
 
-package __
+package proto
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -27,7 +27,15 @@ const (
 type HelloRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// name字段
-	Name          string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Name string  `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Age  []int32 `protobuf:"varint,2,rep,packed,name=age,proto3" json:"age,omitempty"`
+	//	oneof 用于指定一个字段，该字段用户端只能选择一个
+	//
+	// Types that are valid to be assigned to Payment:
+	//
+	//	*HelloRequest_CreditCard
+	//	*HelloRequest_Cash
+	Payment       isHelloRequest_Payment `protobuf_oneof:"payment"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -68,6 +76,54 @@ func (x *HelloRequest) GetName() string {
 	}
 	return ""
 }
+
+func (x *HelloRequest) GetAge() []int32 {
+	if x != nil {
+		return x.Age
+	}
+	return nil
+}
+
+func (x *HelloRequest) GetPayment() isHelloRequest_Payment {
+	if x != nil {
+		return x.Payment
+	}
+	return nil
+}
+
+func (x *HelloRequest) GetCreditCard() string {
+	if x != nil {
+		if x, ok := x.Payment.(*HelloRequest_CreditCard); ok {
+			return x.CreditCard
+		}
+	}
+	return ""
+}
+
+func (x *HelloRequest) GetCash() string {
+	if x != nil {
+		if x, ok := x.Payment.(*HelloRequest_Cash); ok {
+			return x.Cash
+		}
+	}
+	return ""
+}
+
+type isHelloRequest_Payment interface {
+	isHelloRequest_Payment()
+}
+
+type HelloRequest_CreditCard struct {
+	CreditCard string `protobuf:"bytes,3,opt,name=credit_card,json=creditCard,proto3,oneof"`
+}
+
+type HelloRequest_Cash struct {
+	Cash string `protobuf:"bytes,4,opt,name=cash,proto3,oneof"`
+}
+
+func (*HelloRequest_CreditCard) isHelloRequest_Payment() {}
+
+func (*HelloRequest_Cash) isHelloRequest_Payment() {}
 
 // 定义HelloReply消息
 type HelloReply struct {
@@ -119,14 +175,19 @@ var File_helloworld_proto protoreflect.FileDescriptor
 
 const file_helloworld_proto_rawDesc = "" +
 	"\n" +
-	"\x10helloworld.proto\x12\x05proto\"\"\n" +
+	"\x10helloworld.proto\x12\x05proto\"x\n" +
 	"\fHelloRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"&\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x10\n" +
+	"\x03age\x18\x02 \x03(\x05R\x03age\x12!\n" +
+	"\vcredit_card\x18\x03 \x01(\tH\x00R\n" +
+	"creditCard\x12\x14\n" +
+	"\x04cash\x18\x04 \x01(\tH\x00R\x04cashB\t\n" +
+	"\apayment\"&\n" +
 	"\n" +
 	"HelloReply\x12\x18\n" +
 	"\amessage\x18\x01 \x01(\tR\amessage2?\n" +
 	"\aGreeter\x124\n" +
-	"\bSayHello\x12\x13.proto.HelloRequest\x1a\x11.proto.HelloReply\"\x00B\x03Z\x01.b\x06proto3"
+	"\bSayHello\x12\x13.proto.HelloRequest\x1a\x11.proto.HelloReply\"\x00B-Z+github.com/go-example/gRPC/helloworld/protob\x06proto3"
 
 var (
 	file_helloworld_proto_rawDescOnce sync.Once
@@ -159,6 +220,10 @@ func init() { file_helloworld_proto_init() }
 func file_helloworld_proto_init() {
 	if File_helloworld_proto != nil {
 		return
+	}
+	file_helloworld_proto_msgTypes[0].OneofWrappers = []any{
+		(*HelloRequest_CreditCard)(nil),
+		(*HelloRequest_Cash)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

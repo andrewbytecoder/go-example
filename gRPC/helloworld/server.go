@@ -1,13 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
 
 	pb "github.com/go-example/gRPC/helloworld/proto"
-
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 
 	"golang.org/x/net/context"
 	// 导入grpc包
@@ -37,9 +35,28 @@ type server struct {
 // pointer dereference when methods are called.
 type UnimplementedGreeterServer struct{}
 
-func (server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
+func (s server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
+	name := in.GetName()
+	if name == "" {
+		name = "World"
+	}
+
+	log.Printf("Received greeting request from: %s", name)
+
+	x := in.GetPayment()
+	switch x.(type) {
+	case *pb.HelloRequest_CreditCard:
+		fmt.Println("CreditCard", x.(*pb.HelloRequest_CreditCard).CreditCard)
+	case *pb.HelloRequest_Cash:
+		fmt.Println("Cash", x.(*pb.HelloRequest_Cash).Cash)
+	}
+	fmt.Println("SayHello", in.GetPayment())
+
+	return &pb.HelloReply{
+		Message: "Hello, " + name + "! Welcome to gRPC.",
+	}, nil
 }
+
 func (server) mustEmbedUnimplementedGreeterServer() {}
 
 func main() {
