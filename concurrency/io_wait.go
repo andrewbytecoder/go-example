@@ -1,10 +1,9 @@
-package main
+package concurrency
 
 import (
 	"fmt"
 	"log"
 	"os"
-	"runtime"
 	"time"
 )
 
@@ -42,17 +41,17 @@ func highIOWaitSimulation(id int) {
 	}
 }
 
-func main() {
-	// 设置Go运行时可使用的最大CPU核心数
-	runtime.GOMAXPROCS(6)
-
-	fmt.Println("Starting high I/O wait simulation with 6 goroutines...")
-
-	// 启动6个goroutine
-	for i := 1; i <= 6; i++ {
-		go highIOWaitSimulation(i)
-	}
-
-	// 防止主goroutine退出
-	time.Sleep(time.Second * 100)
-}
+//func main() {
+//	// 设置Go运行时可使用的最大CPU核心数
+//	runtime.GOMAXPROCS(6)
+//
+//	fmt.Println("Starting high I/O wait simulation with 6 goroutines...")
+//
+//	// 启动6个goroutine
+//	for i := 1; i <= 6; i++ {
+//		go highIOWaitSimulation(i)
+//	}
+//
+//	// 防止主goroutine退出
+//	time.Sleep(time.Second * 100)
+//}
