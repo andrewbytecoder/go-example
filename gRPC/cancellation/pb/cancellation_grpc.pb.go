@@ -7,7 +7,7 @@
 // 定义包名 Package names are used to prevent name clashes between protocol message types
 //and also will be used to generate code.
 
-package __
+package pb
 
 import (
 	context "context"

@@ -7,7 +7,7 @@
 // 定义包名 Package names are used to prevent name clashes between protocol message types
 //and also will be used to generate code.
 
-package __
+package pb
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -152,7 +152,7 @@ const file_basicauth_proto_rawDesc = "" +
 	"\n" +
 	"addProduct\x12\x0e.proto.Product\x1a\x10.proto.ProductID\x12.\n" +
 	"\n" +
-	"getProduct\x12\x10.proto.ProductID\x1a\x0e.proto.ProductB\x03Z\x01.b\x06proto3"
+	"getProduct\x12\x10.proto.ProductID\x1a\x0e.proto.ProductB)Z'github.com/go-example/gRPC/basicauth/pbb\x06proto3"
 
 var (
 	file_basicauth_proto_rawDescOnce sync.Once

@@ -4,9 +4,9 @@ syntax = "proto3";
 //and also will be used to generate code.
 package proto;
 
-//  protoc -I pb/ --go_out=pb --go-grpc_out=pb pb/basicauth.proto
+// protoc -I pb/ --go_out=. --go_opt=module=github.com/go-example/gRPC/token  --go-grpc_out=. --go-grpc_opt=module=github.com/go-example/gRPC/token  pb/basicauth.proto
 
-option go_package = "."; // 替换为你的实际项目路径
+option go_package = "github.com/go-example/gRPC/token/pb";
 
 service ProductInfo {
   rpc addProduct(Product) returns (ProductID);

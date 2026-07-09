@@ -1,0 +1,28 @@
+package lrucache
+
+// ByteView holds a immutable view of bytes
+type ByteView struct {
+	b []byte
+}
+
+// Len returns the view's length
+func (v ByteView) Len() int {
+	return len(v.b)
+}
+
+// ByteSlice returns a copy of the data as a byte slice
+func (v ByteView) ByteSlice() []byte {
+	return cloneBytes(v.b)
+}
+
+// cloneBytes clones a slice of bytes
+func cloneBytes(b []byte) []byte {
+	c := make([]byte, len(b))
+	copy(c, b)
+	return c
+}
+
+// String returns the view's bytes as a string
+func (v ByteView) String() string {
+	return string(v.b)
+}

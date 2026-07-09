@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package cachepb;
+
+
+//  protoc -I cachepb/ --go_out=pb --go-grpc_out=pb cachepb/cachepb.proto
+
+
+// 根目录下执行
+//  go_opt 指定相对目录，这里执行的是go mod 因此需要在根目录下执行，在实际生成目录的时候，会去除go_opt中指定的model路径
+//  同样 go-grpc_opt 也是去除  go_package 的前置目录
+// protoc -I cachepb --go_out=. --go_opt=module=github.com/go-example/gocache/lrucache --go-grpc_out=. --go-grpc_opt=module=github.com/go-example/gocache/lrucache cachepb/cachepb.proto
+
+option go_package = "github.com/go-example/gocache/lrucache/cachepb"; // 替换为你的实际项目路径
+
+message Request {
+  string group = 1;
+  string key   = 2;
+}
+
+message Response {
+  bytes value = 1;
+}
+
+service GroupCache {
+  rpc Get(Request) returns (Response);
+}

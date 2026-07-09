@@ -4,9 +4,15 @@ syntax = "proto3";
 //and also will be used to generate code.
 package proto;
 
-//  protoc -I pb/ --go_out=pb --go-grpc_out=pb pb/basicauth.proto
+// 相对目录下生成 go 文件
+// -I 指定 proto 文件所在目录
+// --go_out 指定生成 go 文件的输出目录，输出过程中会按照 go_package 指定的包名来生成 go 文件
+// -- go_opt=module=github.com/go-example/gRPC/basicauth 指定 go 公共前缀名称, 生成相对路径的时候会剔除这部分路径
+// --go-grpc_opt=module=github.com/go-example/gRPC/basicauth 指定生成 grpc 文件的输出相对目录提出前缀
+// protoc -I pb/ --go_out=. --go_opt=module=github.com/go-example/gRPC/basicauth  --go-grpc_out=. --go-grpc_opt=module=github.com/go-example/gRPC/basicauth  pb/basicauth.proto
 
-option go_package = "."; // 替换为你的实际项目路径
+// 指定生成 go 文件的包名
+option go_package = "github.com/go-example/gRPC/basicauth/pb"; // 替换为你的实际项目路径
 
 service ProductInfo {
   rpc addProduct(Product) returns (ProductID);

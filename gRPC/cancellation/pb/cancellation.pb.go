@@ -7,7 +7,7 @@
 // 定义包名 Package names are used to prevent name clashes between protocol message types
 //and also will be used to generate code.
 
-package __
+package pb
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -183,7 +183,7 @@ const file_cancellation_proto_rawDesc = "" +
 	"\bgetOrder\x12\x1c.google.protobuf.StringValue\x1a\f.proto.Order\"\x00\x12>\n" +
 	"\fsearchOrders\x12\x1c.google.protobuf.StringValue\x1a\f.proto.Order\"\x000\x01\x12>\n" +
 	"\fupdateOrders\x12\f.proto.Order\x1a\x1c.google.protobuf.StringValue\"\x00(\x01\x12L\n" +
-	"\rprocessOrders\x12\x1c.google.protobuf.StringValue\x1a\x17.proto.CombinedShipment\"\x00(\x010\x01B\x03Z\x01.b\x06proto3"
+	"\rprocessOrders\x12\x1c.google.protobuf.StringValue\x1a\x17.proto.CombinedShipment\"\x00(\x010\x01B,Z*github.com/go-example/gRPC/cancellation/pbb\x06proto3"
 
 var (
 	file_cancellation_proto_rawDescOnce sync.Once
