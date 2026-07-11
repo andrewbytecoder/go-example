@@ -26,7 +26,7 @@ func shutdownHandler(ctx context.Context, sigs chan os.Signal, cancel context.Ca
 func main() {
 	// This is the main context that everything should run in.
 	// All spawned goroutines should exit when cancel is called on this context.
-	// Go routines spawned from main.go coordinate using a WaitGroup. This provides a mechanism to allow the shutdownHandler goroutine
+	// Go routines spawned from exit.go coordinate using a WaitGroup. This provides a mechanism to allow the shutdownHandler goroutine
 	// to block until all the goroutines return . If those goroutines spawn other goroutines then they are responsible for
 	// blocking and returning only when cancel() is called.
 	ctx, cancel := context.WithCancel(context.Background())

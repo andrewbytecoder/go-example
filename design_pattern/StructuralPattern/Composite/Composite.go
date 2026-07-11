@@ -43,7 +43,7 @@ func main() {
 				},
 			},
 			File{
-				Name: "main.go",
+				Name: "exit.go",
 			},
 		},
 	}

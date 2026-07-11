@@ -142,7 +142,7 @@ func TestFilepathGlobPatternExamples(t *testing.T) {
 	files := []string{
 		"a.go", "b.go", "c.txt",
 		"test_1.go", "test_2.go", "test_10.go",
-		"main.go",
+		"exit.go",
 	}
 
 	for _, file := range files {

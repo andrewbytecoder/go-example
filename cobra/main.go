@@ -1,4 +1,4 @@
-// main.go
+// exit.go
 package main
 
 import (
