@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
+	"fmt"
 	"io"
 	stdlog "log"
 	"net"
@@ -13,9 +14,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
-	"github.com/traefik/traefik/v3/pkg/observability/logs"
 	"golang.org/x/net/http/httpguts"
 )
 
@@ -74,13 +72,20 @@ func NewSingleHostHTTPSProxy(target *url.URL, passHostHeader, preservePath bool,
 	return NewSingleHostReverseProxy(target, passHostHeader, preservePath, flushInterval, roundTripper)
 }
 
+// 简单的日志适配器，满足 tsdb.Logger 接口
+type logWriter struct{}
+
+func (l *logWriter) Write(p []byte) (n int, err error) {
+	fmt.Print(string(p))
+	return len(p), nil
+}
 func buildSingleHostHTTPProxy(target *url.URL, passHostHeader bool, preservePath bool, flushInterval time.Duration, roundTripper stdhttp.RoundTripper, bufferPool stdhttputil.BufferPool) stdhttp.Handler {
 	return &stdhttputil.ReverseProxy{
 		Rewrite:       rewriteRequestBuilder(target, passHostHeader, preservePath),
 		Transport:     roundTripper,
 		FlushInterval: flushInterval,
 		BufferPool:    bufferPool,
-		ErrorLog:      stdlog.New(logs.NoLevel(log.Logger, zerolog.DebugLevel), "", 0),
+		ErrorLog:      stdlog.New(&logWriter{}, "", 0),
 		ErrorHandler:  ErrorHandler,
 	}
 }
@@ -186,17 +191,12 @@ func ErrorHandler(w stdhttp.ResponseWriter, req *stdhttp.Request, err error) {
 func ErrorHandlerWithContext(ctx context.Context, w stdhttp.ResponseWriter, err error) {
 	statusCode := ComputeStatusCode(err)
 
-	logger := log.Ctx(ctx)
-
 	if isTLSConfigError(err) {
-		logger.Error().Err(err).Msgf("%d %s", statusCode, statusText(statusCode))
 	} else {
-		logger.Debug().Err(err).Msgf("%d %s", statusCode, statusText(statusCode))
 	}
 
 	w.WriteHeader(statusCode)
 	if _, werr := w.Write([]byte(statusText(statusCode))); werr != nil {
-		logger.Debug().Err(werr).Msg("Error while writing status code")
 	}
 }
 

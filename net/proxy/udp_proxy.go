@@ -3,8 +3,6 @@ package proxy
 import (
 	"io"
 	"net"
-
-	"github.com/rs/zerolog/log"
 )
 
 // UDPProxy is a reverse proxy implementation for UDP traffic.
@@ -19,13 +17,11 @@ func NewUDPProxy(address string) (*UDPProxy, error) {
 
 // ServeUDP proxies a UDP session to the configured backend.
 func (p *UDPProxy) ServeUDP(conn *UDPConn) {
-	log.Debug().Msgf("Handling UDP stream from %s to %s", conn.rAddr, p.target)
 
 	defer conn.Close()
 
 	connBackend, err := net.Dial("udp", p.target)
 	if err != nil {
-		log.Error().Err(err).Msg("Error while dialing backend")
 		return
 	}
 	defer connBackend.Close()
@@ -36,7 +32,6 @@ func (p *UDPProxy) ServeUDP(conn *UDPConn) {
 
 	err = <-errChan
 	if err != nil {
-		log.Error().Err(err).Msg("Error while handling UDP stream")
 	}
 
 	<-errChan
@@ -48,6 +43,5 @@ func udpConnCopy(dst io.WriteCloser, src io.Reader, errCh chan error) {
 	errCh <- err
 
 	if err := dst.Close(); err != nil {
-		log.Debug().Err(err).Msg("Error while terminating UDP stream")
 	}
 }

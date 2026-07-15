@@ -13,7 +13,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/traefik/traefik/v3/pkg/config/dynamic"
 )
 
 func mustParseURL(t *testing.T, rawURL string) *url.URL {
@@ -125,7 +124,7 @@ func TestHTTPProxyWithHTTPSUpstream(t *testing.T) {
 	t.Cleanup(backend.Close)
 
 	manager := NewHTTPTransportManager(nil)
-	manager.Update(map[string]*dynamic.ServersTransport{
+	manager.Update(map[string]*ServersTransport{
 		"default@internal": {InsecureSkipVerify: true},
 	})
 
