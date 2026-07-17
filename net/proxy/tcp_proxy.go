@@ -6,8 +6,6 @@ import (
 	"net"
 	"syscall"
 	"time"
-
-	"github.com/rs/zerolog/log"
 )
 
 // TCPProxy forwards a TCP connection to a TCP service.
@@ -26,16 +24,11 @@ func NewTCPProxy(address string, dialer TCPDialer) (*TCPProxy, error) {
 
 // ServeTCP forwards the connection to a backend service.
 func (p *TCPProxy) ServeTCP(conn TCPWriteCloser) {
-	log.Debug().
-		Str("address", p.address).
-		Str("remoteAddr", conn.RemoteAddr().String()).
-		Msg("Handling TCP connection")
 
 	defer conn.Close()
 
 	connBackend, err := p.dialBackend(conn)
 	if err != nil {
-		log.Error().Err(err).Msg("Error while dialing backend")
 		return
 	}
 	defer connBackend.Close()
@@ -47,9 +40,7 @@ func (p *TCPProxy) ServeTCP(conn TCPWriteCloser) {
 	err = <-errChan
 	if err != nil {
 		if isTCPReadConnResetError(err) {
-			log.Debug().Err(err).Msg("Error while handling TCP connection")
 		} else {
-			log.Error().Err(err).Msg("Error while handling TCP connection")
 		}
 	}
 
@@ -72,14 +63,12 @@ func (p *TCPProxy) connCopy(dst, src TCPWriteCloser, errCh chan error) {
 	errClose := dst.CloseWrite()
 	if errClose != nil {
 		if !isTCPSocketNotConnectedError(errClose) {
-			log.Debug().Err(errClose).Msg("Error while terminating TCP connection")
 		}
 		return
 	}
 
 	if p.dialer.TerminationDelay() >= 0 {
 		if err := dst.SetReadDeadline(time.Now().Add(p.dialer.TerminationDelay())); err != nil {
-			log.Debug().Err(err).Msg("Error while setting TCP connection deadline")
 		}
 	}
 }

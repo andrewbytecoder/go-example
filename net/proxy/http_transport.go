@@ -15,14 +15,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/rs/zerolog/log"
 	"github.com/spiffe/go-spiffe/v2/bundle/x509bundle"
 	"github.com/spiffe/go-spiffe/v2/spiffeid"
 	"github.com/spiffe/go-spiffe/v2/spiffetls/tlsconfig"
 	"github.com/spiffe/go-spiffe/v2/svid/x509svid"
-	"github.com/traefik/traefik/v3/pkg/config/dynamic"
-	traefiktls "github.com/traefik/traefik/v3/pkg/tls"
-	"github.com/traefik/traefik/v3/pkg/types"
 	"golang.org/x/net/http/httpguts"
 )
 
@@ -36,7 +32,7 @@ type HTTPSpiffeX509Source interface {
 type HTTPTransportManager struct {
 	rtLock        sync.RWMutex
 	roundTrippers map[string]stdhttp.RoundTripper
-	configs       map[string]*dynamic.ServersTransport
+	configs       map[string]*ServersTransport
 	tlsConfigs    map[string]*tls.Config
 
 	spiffeX509Source HTTPSpiffeX509Source
@@ -46,24 +42,24 @@ type HTTPTransportManager struct {
 func NewHTTPTransportManager(spiffeX509Source HTTPSpiffeX509Source) *HTTPTransportManager {
 	manager := &HTTPTransportManager{
 		roundTrippers:    make(map[string]stdhttp.RoundTripper),
-		configs:          make(map[string]*dynamic.ServersTransport),
+		configs:          make(map[string]*ServersTransport),
 		tlsConfigs:       make(map[string]*tls.Config),
 		spiffeX509Source: spiffeX509Source,
 	}
 
-	manager.Update(map[string]*dynamic.ServersTransport{"default@internal": {}})
+	manager.Update(map[string]*ServersTransport{"default@internal": {}})
 	return manager
 }
 
 // Update updates the transport configurations.
-func (t *HTTPTransportManager) Update(newConfigs map[string]*dynamic.ServersTransport) {
+func (t *HTTPTransportManager) Update(newConfigs map[string]*ServersTransport) {
 	if newConfigs == nil {
-		newConfigs = map[string]*dynamic.ServersTransport{}
+		newConfigs = map[string]*ServersTransport{}
 	}
 
 	if _, ok := newConfigs["default@internal"]; !ok {
 		newConfigs = maps.Clone(newConfigs)
-		newConfigs["default@internal"] = &dynamic.ServersTransport{}
+		newConfigs["default@internal"] = &ServersTransport{}
 	}
 
 	t.rtLock.Lock()
@@ -87,13 +83,11 @@ func (t *HTTPTransportManager) Update(newConfigs map[string]*dynamic.ServersTran
 			tlsConfig *tls.Config
 		)
 		if tlsConfig, err = t.createTLSConfig(newConfig); err != nil {
-			log.Error().Err(err).Msgf("Could not configure HTTP transport %s TLS configuration, fallback on default TLS config", configName)
 		}
 		t.tlsConfigs[configName] = tlsConfig
 
 		t.roundTrippers[configName], err = t.createRoundTripper(newConfig, tlsConfig)
 		if err != nil {
-			log.Error().Err(err).Msgf("Could not configure HTTP transport %s, fallback on default transport", configName)
 			t.roundTrippers[configName] = stdhttp.DefaultTransport
 		}
 	}
@@ -108,13 +102,11 @@ func (t *HTTPTransportManager) Update(newConfigs map[string]*dynamic.ServersTran
 			tlsConfig *tls.Config
 		)
 		if tlsConfig, err = t.createTLSConfig(newConfig); err != nil {
-			log.Error().Err(err).Msgf("Could not configure HTTP transport %s TLS configuration, fallback on default TLS config", newConfigName)
 		}
 		t.tlsConfigs[newConfigName] = tlsConfig
 
 		t.roundTrippers[newConfigName], err = t.createRoundTripper(newConfig, tlsConfig)
 		if err != nil {
-			log.Error().Err(err).Msgf("Could not configure HTTP transport %s, fallback on default transport", newConfigName)
 			t.roundTrippers[newConfigName] = stdhttp.DefaultTransport
 		}
 	}
@@ -139,7 +131,7 @@ func (t *HTTPTransportManager) GetRoundTripper(name string) (stdhttp.RoundTrippe
 }
 
 // Get gets a transport by name.
-func (t *HTTPTransportManager) Get(name string) (*dynamic.ServersTransport, error) {
+func (t *HTTPTransportManager) Get(name string) (*ServersTransport, error) {
 	if name == "" {
 		name = "default@internal"
 	}
@@ -170,7 +162,7 @@ func (t *HTTPTransportManager) GetTLSConfig(name string) (*tls.Config, error) {
 	return nil, fmt.Errorf("tls config not found %s", name)
 }
 
-func (t *HTTPTransportManager) createTLSConfig(cfg *dynamic.ServersTransport) (*tls.Config, error) {
+func (t *HTTPTransportManager) createTLSConfig(cfg *ServersTransport) (*tls.Config, error) {
 	var config *tls.Config
 	if cfg.Spiffe != nil {
 		if t.spiffeX509Source == nil {
@@ -192,7 +184,7 @@ func (t *HTTPTransportManager) createTLSConfig(cfg *dynamic.ServersTransport) (*
 
 		var cipherSuites []uint16
 		for _, cipher := range cfg.CipherSuites {
-			cipherID, exists := traefiktls.CipherSuites[cipher]
+			cipherID, exists := CipherSuites[cipher]
 			if !exists {
 				return nil, fmt.Errorf("invalid CipherSuite: %s", cipher)
 			}
@@ -201,7 +193,7 @@ func (t *HTTPTransportManager) createTLSConfig(cfg *dynamic.ServersTransport) (*
 
 		var minVersion uint16
 		if cfg.MinVersion != "" {
-			value, exists := traefiktls.MinVersion[cfg.MinVersion]
+			value, exists := MinVersion[cfg.MinVersion]
 			if !exists {
 				return nil, fmt.Errorf("invalid TLS minimum version: %s", cfg.MinVersion)
 			}
@@ -210,7 +202,7 @@ func (t *HTTPTransportManager) createTLSConfig(cfg *dynamic.ServersTransport) (*
 
 		var maxVersion uint16
 		if cfg.MaxVersion != "" {
-			value, exists := traefiktls.MaxVersion[cfg.MaxVersion]
+			value, exists := MaxVersion[cfg.MaxVersion]
 			if !exists {
 				return nil, fmt.Errorf("invalid TLS maximum version: %s", cfg.MaxVersion)
 			}
@@ -231,20 +223,19 @@ func (t *HTTPTransportManager) createTLSConfig(cfg *dynamic.ServersTransport) (*
 			MaxVersion:         maxVersion,
 		}
 
-		peerCertSANs := make([]traefiktls.SAN, len(cfg.PeerCertSANs))
+		peerCertSANs := make([]SAN, len(cfg.PeerCertSANs))
 		copy(peerCertSANs, cfg.PeerCertSANs)
 
 		if cfg.PeerCertURI != "" {
-			log.Warn().Msg("PeerCertURI option is deprecated, please use PeerCertSANs instead")
-			peerCertSANs = append(peerCertSANs, traefiktls.SAN{
-				Type:  traefiktls.SANURIType,
+			peerCertSANs = append(peerCertSANs, SAN{
+				Type:  SANURIType,
 				Value: cfg.PeerCertURI,
 			})
 		}
 
 		if len(peerCertSANs) > 0 {
 			config.VerifyPeerCertificate = func(rawCerts [][]byte, _ [][]*x509.Certificate) error {
-				return traefiktls.VerifyPeerCertificate(peerCertSANs, config.RootCAs, rawCerts)
+				return VerifyPeerCertificate(peerCertSANs, config.RootCAs, rawCerts)
 			}
 		}
 	}
@@ -277,7 +268,7 @@ func (c httpConnWithTimeouts) Write(b []byte) (n int, err error) {
 	return c.Conn.Write(b)
 }
 
-func customHTTPDialContext(dialer *net.Dialer, cfg *dynamic.ForwardingTimeouts) func(ctx context.Context, network string, address string) (net.Conn, error) {
+func customHTTPDialContext(dialer *net.Dialer, cfg *ForwardingTimeouts) func(ctx context.Context, network string, address string) (net.Conn, error) {
 	return func(ctx context.Context, network string, address string) (net.Conn, error) {
 		conn, err := dialer.DialContext(ctx, network, address)
 		if cfg.ReadTimeout <= 0 && cfg.WriteTimeout <= 0 {
@@ -292,7 +283,7 @@ func customHTTPDialContext(dialer *net.Dialer, cfg *dynamic.ForwardingTimeouts) 
 	}
 }
 
-func (t *HTTPTransportManager) createRoundTripper(cfg *dynamic.ServersTransport, tlsConfig *tls.Config) (stdhttp.RoundTripper, error) {
+func (t *HTTPTransportManager) createRoundTripper(cfg *ServersTransport, tlsConfig *tls.Config) (stdhttp.RoundTripper, error) {
 	if cfg == nil {
 		return nil, errors.New("no transport configuration given")
 	}
@@ -440,7 +431,7 @@ func (m *httpSmartRoundTripper) RoundTrip(req *stdhttp.Request) (*stdhttp.Respon
 	return m.http2.RoundTrip(req)
 }
 
-func createHTTPRootCACertPool(rootCAs []types.FileOrContent) *x509.CertPool {
+func createHTTPRootCACertPool(rootCAs []FileOrContent) *x509.CertPool {
 	if len(rootCAs) == 0 {
 		return nil
 	}
@@ -449,7 +440,6 @@ func createHTTPRootCACertPool(rootCAs []types.FileOrContent) *x509.CertPool {
 	for _, cert := range rootCAs {
 		certContent, err := cert.Read()
 		if err != nil {
-			log.Error().Err(err).Msg("Error while reading RootCAs")
 			continue
 		}
 
@@ -459,7 +449,7 @@ func createHTTPRootCACertPool(rootCAs []types.FileOrContent) *x509.CertPool {
 	return roots
 }
 
-func buildHTTPSpiffeAuthorizer(cfg *dynamic.Spiffe) (tlsconfig.Authorizer, error) {
+func buildHTTPSpiffeAuthorizer(cfg *Spiffe) (tlsconfig.Authorizer, error) {
 	switch {
 	case len(cfg.IDs) > 0:
 		spiffeIDs := make([]spiffeid.ID, 0, len(cfg.IDs))

@@ -1,99 +1,58 @@
 package main
 
 import (
+	"context"
+	"log"
+	"net"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
-type DataResponse struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
-}
-
-type DataItem struct {
-	ID        int       `json:"id"`
-	Name      string    `json:"name"`
-	Value     string    `json:"value"`
-	CreatedAt time.Time `json:"created_at"`
-}
-
-var mockData = []DataItem{
-	{ID: 1, Name: "item1", Value: "value1", CreatedAt: time.Now()},
-	{ID: 2, Name: "item2", Value: "value2", CreatedAt: time.Now()},
-	{ID: 3, Name: "item3", Value: "value3", CreatedAt: time.Now()},
-}
-
 func main() {
-	r := gin.Default()
+	r := gin.New()
 
-	r.GET("/health", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"status": "ok",
+	r.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"msg": "pong",
 		})
 	})
 
-	api := r.Group("/api/v1")
-	{
-		api.GET("/data", GetDataHandler)
-		api.GET("/data/:id", GetDataByIDHandler)
-		api.POST("/data", CreateDataHandler)
+	// 1️⃣ 创建自己的 TCP Listener
+	listener, err := net.Listen("tcp", ":8080")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
 	}
 
-	r.Run(":8080")
-}
+	// 2️⃣ 创建 HTTP Server
+	server := &http.Server{
+		Handler: r,
+	}
 
-func GetDataHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, DataResponse{
-		Code:    200,
-		Message: "success",
-		Data:    mockData,
-	})
-}
-
-func GetDataByIDHandler(c *gin.Context) {
-	id := c.Param("id")
-
-	for _, item := range mockData {
-		if item.ID == 1 && id == "1" ||
-			item.ID == 2 && id == "2" ||
-			item.ID == 3 && id == "3" {
-			c.JSON(http.StatusOK, DataResponse{
-				Code:    200,
-				Message: "success",
-				Data:    item,
-			})
-			return
+	// 3️⃣ 启动服务（非阻塞）
+	go func() {
+		log.Println("server listening on :8080")
+		if err := server.Serve(listener); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("listen error: %v", err)
 		}
+	}()
+
+	// 4️⃣ 优雅退出
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	log.Println("shutting down server...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := server.Shutdown(ctx); err != nil {
+		log.Fatal("server forced to shutdown:", err)
 	}
 
-	c.JSON(http.StatusNotFound, DataResponse{
-		Code:    404,
-		Message: "data not found",
-		Data:    nil,
-	})
-}
-
-func CreateDataHandler(c *gin.Context) {
-	var newItem DataItem
-	if err := c.ShouldBindJSON(&newItem); err != nil {
-		c.JSON(http.StatusBadRequest, DataResponse{
-			Code:    400,
-			Message: "invalid request: " + err.Error(),
-			Data:    nil,
-		})
-		return
-	}
-
-	newItem.ID = len(mockData) + 1
-	newItem.CreatedAt = time.Now()
-	mockData = append(mockData, newItem)
-
-	c.JSON(http.StatusCreated, DataResponse{
-		Code:    201,
-		Message: "data created successfully",
-		Data:    newItem,
-	})
+	log.Println("server exited")
 }
