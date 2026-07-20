@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package tunnel;
+
+
+
+// protoc -I tunnel/ --go_out=. --go_opt=module=github.com/go-example/net/grpc  --go-grpc_out=. --go-grpc_opt=module=github.com/go-example/net/grpc  tunnel/tunnel.proto
+
+option go_package = "github.com/go-example/net/grpc/tunnel";
+
+// 注册请求
+message RegisterRequest {
+  string prefix = 1;      // URL前缀，例如 "/app-a"
+  string agent_id = 2;    // 代理唯一标识（可选，用于日志追踪）
+}
+
+message RegisterResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// 隧道透传消息
+message TunnelRequest {
+  string id = 1;
+  string method = 2;
+  string url = 3;
+  map<string, string> headers = 4;
+  bytes body = 5;
+}
+
+message TunnelResponse {
+  string id = 1;
+  int32 status_code = 2;
+  map<string, string> headers = 3;
+  bytes body = 4;
+}
+
+service TunnelService {
+  // 1. 注册路由前缀
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+
+  // 2. 建立数据透传双向流
+  rpc OpenTunnel(stream TunnelResponse) returns (stream TunnelRequest);
+}
